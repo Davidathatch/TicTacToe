@@ -91,6 +91,7 @@
         public void AddBoardTile(BoardTile newTile)
         {
             BoardTiles.AddLast(newTile);
+            newTile.OnClaimed += this.ProcessTileClaim;
         }
 
         /// <summary>

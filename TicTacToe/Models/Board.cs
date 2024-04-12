@@ -1,4 +1,6 @@
-﻿namespace TicTacToe.Models
+﻿using System.Drawing;
+
+namespace TicTacToe.Models
 {
     public class Board
     {
@@ -21,76 +23,58 @@
         /// <param name="boardSize">Size of the board (board will always square)</param>
         private void GenerateBoard(int boardSize)
         {
-            //Used to keep track of which tiles in the current row need to be added to the two diagonal components
-            int ltrCounter = 1;
-            int rtlCounter = boardSize;
+            //Coordinates of the next tile to be added to the two diagonal components
+            Point nextLTR = new(1, 1);
+            Point nextRTL = new(boardSize, 1);
 
-            //Create the two diagonal components, of which there will only ever be two, regardless of the board size
-            BoardComponent rtlBoardComponent = new("2rtl", ProcessComponentComplete);
-            BoardComponent ltrBoardComponent = new("2ltr", ProcessComponentComplete);
-
-            //Create all necessary rows and columns for the given grid size (the grid is always square)
-            for (int componentIndex = 1; componentIndex <= boardSize; componentIndex++)
+            //Create all the components
+            for (int index = 1; index <= boardSize; index++)
             {
-                //Create Row (First digit of index is 0, second digit is row position)
-                BoardComponent newRow = new($"0{componentIndex}", ProcessComponentComplete);
-
-                //Create Column (First digit of index is 1, second digit is column position)
-                BoardComponent newColumn = new($"1{componentIndex}", ProcessComponentComplete);
-
-                for (int tileIndex = 1; tileIndex <= boardSize; tileIndex++)
-                {
-                    //Create new tile to be added to the board
-                    BoardTile newTile = new();
-
-                    //If the new tile needs to be added to either of the diagonal components, do so
-                    if (tileIndex == rtlCounter)
-                    {
-                        newTile.OnClaimed += rtlBoardComponent.ProcessTileClaim;
-                        rtlBoardComponent.AddBoardTile(newTile);
-                    }
-
-                    if (tileIndex == ltrCounter)
-                    {
-                        newTile.OnClaimed += ltrBoardComponent.ProcessTileClaim;
-                        ltrBoardComponent.AddBoardTile(newTile);
-                    }
-
-                    /*
-                     If the current index of the components (row/column) being created is equal to the index of the
-                    tile being created within the components, only create one tile to assign to both components.
-                     */
-                    if (tileIndex == componentIndex)
-                    {
-                        newTile.OnClaimed += newRow.ProcessTileClaim;
-                        newTile.OnClaimed += newColumn.ProcessTileClaim;
-                        newRow.AddBoardTile(newTile);
-                        newColumn.AddBoardTile(newTile);
-                    }
-                    //Otherwise, create a new tile for the column and add the previously created tile to the current row
-                    else
-                    {
-                        newTile.OnClaimed += newRow.ProcessTileClaim;
-                        newRow.AddBoardTile(newTile);
-
-                        BoardTile newColumnTile = new();
-                        newColumnTile.OnClaimed += newColumn.ProcessTileClaim;
-                        newColumn.AddBoardTile(newColumnTile);
-                    }
-                }
-
-                //Add rows and columns to BoardComponents
+                //Create and add the row and column at the current index
+                BoardComponent newRow = new($"0{index}", ProcessComponentComplete);
+                BoardComponent newColumn = new($"1{index}", ProcessComponentComplete);
                 BoardComponents.Add(newRow.BoardIndex, newRow);
                 BoardComponents.Add(newColumn.BoardIndex, newColumn);
-
-                //Increment and decrement the diagonal counters
-                rtlCounter++;
-                ltrCounter--;
             }
+            
+            //Create and add the two diagonal components
+            BoardComponent ltrComponent = new("2ltr", ProcessComponentComplete);
+            BoardComponent rtlComponent = new("2rtl", ProcessComponentComplete);
+            BoardComponents.Add(ltrComponent.BoardIndex, ltrComponent);
+            BoardComponents.Add(rtlComponent.BoardIndex, rtlComponent);
 
-            //Add the two diagonal components
-            BoardComponents.Add(rtlBoardComponent.BoardIndex, rtlBoardComponent);
-            BoardComponents.Add(ltrBoardComponent.BoardIndex, ltrBoardComponent);
+            for (int rowIndex = 1; rowIndex <= boardSize; rowIndex++)
+            {
+                BoardComponent currentRow = BoardComponents[$"0{rowIndex}"];
+
+                for (int columnIndex = 1; columnIndex <= boardSize; columnIndex++)
+                {
+                    BoardTile newTile = new();
+                    BoardComponent currentColumn = BoardComponents[$"1{columnIndex}"];
+                    
+                    //Add the new tile to the current row and column
+                    currentRow.AddBoardTile(newTile);
+                    currentColumn.AddBoardTile(newTile);
+
+                    Point currentCoordinates = new Point(columnIndex, rowIndex);
+                    
+                    //If this tile should be included in the left to right diagonal, add it
+                    if (currentCoordinates.Equals(nextLTR))
+                    {
+                        ltrComponent.AddBoardTile(newTile);
+                        nextLTR.X++;
+                        nextLTR.Y++;
+                    }
+
+                    //If this tile should be included in the right to left diagonal, add it
+                    if (currentCoordinates.Equals(nextRTL))
+                    {
+                        rtlComponent.AddBoardTile(newTile);
+                        nextRTL.X--;
+                        nextRTL.Y++;
+                    }
+                }
+            }
         }
 
         /// <summary>
