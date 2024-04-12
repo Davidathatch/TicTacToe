@@ -19,7 +19,7 @@
         /// <summary>
         /// List containing all BoardTiles contained in this component.
         /// </summary>
-        public List<BoardTile> BoardTiles { get; set; }
+        public LinkedList<BoardTile> BoardTiles { get; set; }
 
         /// <summary>
         /// The number of tiles in this component that have been claimed by a single
@@ -84,12 +84,13 @@
         }
 
         /// <summary>
-        /// Add a tile to this component.
+        /// Add a tile to this component. Tiles should be added in the order they appear on the board (left to right
+        /// for rows, top to bottom for columns)
         /// </summary>
         /// <param name="newTile">Tile being added</param>
         public void AddBoardTile(BoardTile newTile)
         {
-            BoardTiles.Add(newTile);
+            BoardTiles.AddLast(newTile);
         }
 
         /// <summary>

@@ -4,6 +4,12 @@
     {
         public Board(int boardSize)
         {
+            //If boardSize is an invalid value, throw an exception
+            if (boardSize <= 0)
+            {
+                throw new ArgumentOutOfRangeException($"{boardSize} is an invalid Board size. Must be 1 or greater.");
+            }
+            
             BoardComponents = new();
             GameOver = false;
             GenerateBoard(boardSize);
@@ -16,8 +22,8 @@
         private void GenerateBoard(int boardSize)
         {
             //Used to keep track of which tiles in the current row need to be added to the two diagonal components
-            int rtlCounter = 1;
-            int ltrCounter = boardSize;
+            int ltrCounter = 1;
+            int rtlCounter = boardSize;
 
             //Create the two diagonal components, of which there will only ever be two, regardless of the board size
             BoardComponent rtlBoardComponent = new("2rtl", ProcessComponentComplete);
@@ -57,7 +63,7 @@
                     if (tileIndex == componentIndex)
                     {
                         newTile.OnClaimed += newRow.ProcessTileClaim;
-                        newTile.OnClaimed += newRow.ProcessTileClaim;
+                        newTile.OnClaimed += newColumn.ProcessTileClaim;
                         newRow.AddBoardTile(newTile);
                         newColumn.AddBoardTile(newTile);
                     }
