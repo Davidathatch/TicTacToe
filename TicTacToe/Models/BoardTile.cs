@@ -24,11 +24,11 @@
         /// </summary>
         public event Action<BoardTile> OnClaimed;
 
-        private void ClaimTile(Player claimedBy)
+        public void ClaimTile(Player claimedBy)
         {
-            OnClaimed?.Invoke(this);
             ClaimedBy = claimedBy;
             Claimed = true;
+            OnClaimed?.Invoke(this);
             //TODO: finish tile play method
         }
     }

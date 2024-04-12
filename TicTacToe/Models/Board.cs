@@ -13,6 +13,7 @@ namespace TicTacToe.Models
             }
             
             BoardComponents = new();
+            BoardTiles = new();
             GameOver = false;
             GenerateBoard(boardSize);
         }
@@ -49,7 +50,10 @@ namespace TicTacToe.Models
 
                 for (int columnIndex = 1; columnIndex <= boardSize; columnIndex++)
                 {
+                    //Create the tile and save it to the board
                     BoardTile newTile = new();
+                    BoardTiles.Add(new(columnIndex, rowIndex), newTile);
+                    
                     BoardComponent currentColumn = BoardComponents[$"1{columnIndex}"];
                     
                     //Add the new tile to the current row and column
@@ -81,6 +85,12 @@ namespace TicTacToe.Models
         /// All components comprising this board.
         /// </summary>
         public Dictionary<string, BoardComponent> BoardComponents { get; set; }
+
+        /// <summary>
+        /// All tiles on this board, accessible through their coordinates.
+        /// X = Column, Y = Row
+        /// </summary>
+        public Dictionary<Point, BoardTile> BoardTiles { get; set; }
 
         /// <summary>
         /// True if the game has ended.

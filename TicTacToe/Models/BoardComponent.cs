@@ -59,6 +59,12 @@
             {
                 ClaimedBy = claimedTile.ClaimedBy;
                 NonChallengedClaims++;
+
+                if (NonChallengedClaims == BoardTiles.Count)
+                {
+                    OnComplete(this);
+                }
+                
                 return;
             }
 
