@@ -1,0 +1,17 @@
+﻿.blue-theme {
+    --primary: #B3C8CF;
+    --secondary: #99BC85;
+    --secondary-light: #E1F0DA;
+}
+
+.pink-theme {
+    --primary: #D77FA1;
+    --secondary: #8E7AB5;
+    --secondary-light: #DFCCFB;
+}
+
+.orange-theme {
+    --primary: #EFB495;
+    --secondary: #BB8493;
+    --secondary-light: #F3D0D7;
+}

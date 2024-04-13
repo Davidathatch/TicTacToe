@@ -1,7 +1,24 @@
-﻿@page "/"
+﻿@using TicTacToe.Components
+@using TicTacToe.Models
+
+@page "/"
 
 <PageTitle>Home</PageTitle>
+<h1>Test</h1>
 
-<h1>Hello, world!</h1>
+<Tile RepresentingBoardTile="testTile"></Tile>
 
-Welcome to your new app.
+@code {
+
+    public Player testPlayer { get; set; } = new('X');
+    public BoardTile testTile { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        testTile.ClaimTile(testPlayer);
+        InvokeAsync(StateHasChanged);
+    }
+
+}

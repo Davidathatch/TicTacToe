@@ -7,17 +7,17 @@ namespace TicTacToe
         /// <summary>
         /// Player one
         /// </summary>
-        public Player PlayerOne { get; set; }
+        public Player? PlayerOne { get; set; }
 
         /// <summary>
         /// Player two
         /// </summary>
-        public Player PlayerTwo { get; set; }
+        public Player? PlayerTwo { get; set; }
 
         /// <summary>
         /// Player whose turn it is currently
         /// </summary>
-        public Player CurrentPlayer { get; set; }
+        public Player? CurrentPlayer { get; set; }
 
 
     }

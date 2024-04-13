@@ -1,0 +1,13 @@
+﻿@using TicTacToe.Models
+<div class="board-tile">
+    <h1 class="tile-claimed-character">
+        @if (RepresentingBoardTile.ClaimedBy is not null)
+        {
+            RepresentingBoardTile.ClaimedBy.Symbol.ToString();
+        }
+    </h1>
+</div>
+
+@code {
+    [Parameter] public BoardTile RepresentingBoardTile { get; set; }
+}
