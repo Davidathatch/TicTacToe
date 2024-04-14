@@ -1,17 +1,63 @@
 ﻿.blue-theme {
     --primary: #B3C8CF;
+    --primary-light: #D6E8EE;
     --secondary: #99BC85;
     --secondary-light: #E1F0DA;
 }
 
 .pink-theme {
     --primary: #D77FA1;
+    --primary-light: #F0C1D3;
     --secondary: #8E7AB5;
     --secondary-light: #DFCCFB;
 }
 
 .orange-theme {
     --primary: #EFB495;
+    --primary-light: #FFDFCE;
     --secondary: #BB8493;
     --secondary-light: #F3D0D7;
+}
+
+body {
+    overflow: hidden;
+    margin: 0;
+}
+
+#home-page {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    background: var(--primary);
+    height: 100vh;
+    overflow: hidden;
+}
+
+#board-grid {
+    padding: 5%;
+    align-self: center;
+    width: 60vmin;
+    height: 60vmin;
+    aspect-ratio: 1/1;
+
+    border-radius: 50px;
+    background: linear-gradient(133deg, rgba(255, 255, 255, 0.66) 0%, rgba(255, 255, 255, 0.28) 100%);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(7.5px);
+}
+
+.tile-container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 10%;
+}
+
+.board-tile {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 15px;
+    border: 4px solid #FFF;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }

@@ -4,21 +4,13 @@
 @page "/"
 
 <PageTitle>Home</PageTitle>
-<h1>Test</h1>
 
-<Tile RepresentingBoardTile="testTile"></Tile>
+<div id="home-page">
+    <BoardGrid RepresentingBoard="testBoard"/>
+</div>
 
 @code {
 
     public Player testPlayer { get; set; } = new('X');
-    public BoardTile testTile { get; set; } = new();
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        testTile.ClaimTile(testPlayer);
-        InvokeAsync(StateHasChanged);
-    }
-
+    public Board testBoard { get; set; } = new(3);
 }

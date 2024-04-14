@@ -15,6 +15,7 @@ namespace TicTacToe.Models
             BoardComponents = new();
             BoardTiles = new();
             GameOver = false;
+            BoardSize = boardSize;
             GenerateBoard(boardSize);
         }
 
@@ -85,6 +86,11 @@ namespace TicTacToe.Models
         /// All components comprising this board.
         /// </summary>
         public Dictionary<string, BoardComponent> BoardComponents { get; set; }
+
+        /// <summary>
+        /// Size of this board. Each component will contain this number of tiles.
+        /// </summary>
+        public int BoardSize { get; set; }
 
         /// <summary>
         /// All tiles on this board, accessible through their coordinates.
