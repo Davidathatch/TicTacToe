@@ -33,6 +33,39 @@ body {
     overflow: hidden;
 }
 
+.bg-image {
+    position: absolute;
+}
+
+#bg-image-tl {
+    top: 5%;
+    left: 10%;
+    width: 45vmin;
+    height: auto;
+}
+
+#bg-image-tr {
+    top: 5%;
+    right: 10%;
+    width: 45vmin;
+    height: auto;
+}
+
+#bg-image-bl {
+    bottom: 5%;
+    left: 8%;
+    width: 40vmin;
+    height: auto;
+}
+
+#bg-image-br {
+    bottom: 5%;
+    right: 10%;
+    width: 50vmin;
+    height: auto;
+    transform: rotate(-30deg);
+}
+
 #board-grid {
     padding: 5%;
     align-self: center;
@@ -42,7 +75,7 @@ body {
 
     border-radius: 50px;
     background: linear-gradient(133deg, rgba(255, 255, 255, 0.66) 0%, rgba(255, 255, 255, 0.28) 100%);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(7.5px);
 }
 
@@ -56,8 +89,24 @@ body {
 .board-tile {
     width: 100%;
     aspect-ratio: 1/1;
-    border-radius: 15px;
-    border: 4px solid #FFF;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    /*border-radius: 15px;*/
+    /*border: 4px solid #FFF;*/
+    fill: blue;
+    /*box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25), 0 4px 4px 0 rgba(0, 0, 0, 0.25);*/
+}
+
+.claimed-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.claimed-svg svg path {
+    fill: blue;
+}
+
+.board-tile-claimed {
+    fill: url(#claimed-tile-gradient);
 }

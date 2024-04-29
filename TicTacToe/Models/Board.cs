@@ -52,8 +52,8 @@ namespace TicTacToe.Models
                 for (int columnIndex = 1; columnIndex <= boardSize; columnIndex++)
                 {
                     //Create the tile and save it to the board
-                    BoardTile newTile = new();
-                    BoardTiles.Add(new(columnIndex, rowIndex), newTile);
+                    BoardTile newTile = new() {TilePosition = new(columnIndex, rowIndex)};
+                    BoardTiles.Add(newTile.TilePosition, newTile);
                     
                     BoardComponent currentColumn = BoardComponents[$"1{columnIndex}"];
                     

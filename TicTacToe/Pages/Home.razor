@@ -6,6 +6,10 @@
 <PageTitle>Home</PageTitle>
 
 <div id="home-page">
+    <img id="bg-image-tl" class="bg-image" src="Assets/Squiggle.svg"/>
+    <img id="bg-image-tr" class="bg-image" src="Assets/Donut.svg"/>
+    <img id="bg-image-bl" class="bg-image" src="Assets/Donut.svg"/>
+    <img id="bg-image-br" class="bg-image" src="Assets/Squiggle.svg"/>
     <BoardGrid RepresentingBoard="testBoard"/>
 </div>
 
@@ -13,4 +17,9 @@
 
     public Player testPlayer { get; set; } = new('X');
     public Board testBoard { get; set; } = new(3);
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        
+    }
 }

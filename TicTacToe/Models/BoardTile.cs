@@ -1,4 +1,6 @@
-﻿namespace TicTacToe.Models
+﻿using System.Drawing;
+
+namespace TicTacToe.Models
 {
     public class BoardTile()
     {
@@ -18,6 +20,12 @@
         /// that won this round (if applicable).
         /// </summary>
         public bool WinningTile { get; set; } = false;
+
+        /// <summary>
+        /// This tile's position on the board.
+        /// X = Column, Y = Row
+        /// </summary>
+        public Point TilePosition { get; set; }
 
         /// <summary>
         /// Event to be invoked when this tile is claimed.

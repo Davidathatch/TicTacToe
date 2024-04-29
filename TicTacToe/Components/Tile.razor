@@ -1,13 +1,26 @@
-﻿@using TicTacToe.Models
-<div class="board-tile">
-    <h1 class="tile-claimed-character">
-        @if (RepresentingBoardTile.ClaimedBy is not null)
-        {
-            RepresentingBoardTile.ClaimedBy.Symbol.ToString();
-        }
-    </h1>
+﻿@using System.Drawing
+@using TicTacToe.Models
+@inject IJSRuntime JS
+
+<div class="tile-container" @onclick="() => RepresentingBoardTile.ClaimTile(new('X'))" id="@TileElementId">
+
 </div>
 
 @code {
     [Parameter] public BoardTile RepresentingBoardTile { get; set; }
+    public string TileElementId { get; set; }
+    private string ClaimingPlayerChar;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        RepresentingBoardTile.OnClaimed += TileClaimed;
+        TileElementId = $"{RepresentingBoardTile.TilePosition.Y}-{RepresentingBoardTile.TilePosition.X}";
+    }
+
+    private void TileClaimed(BoardTile claimedTile)
+    {
+        ClaimingPlayerChar = claimedTile.ClaimedBy!.Symbol.ToString();
+        // JS.InvokeVoidAsync("applyClaimedTileStyling", TileElementId);
+    }
 }

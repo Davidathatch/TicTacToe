@@ -4,26 +4,26 @@
 <div id="board-grid" style="display: grid; grid-template-columns: @RepresentingBoard.BoardSize; grid-template-rows: @RepresentingBoard.BoardSize">
     @for (int i = 1; i <= RepresentingBoard.BoardSize; i++)
     {
-            @foreach (BoardTile tile in RepresentingBoard.BoardComponents[$"0{i}"].BoardTiles)
-            {
-                <div class="tile-container">
-                    <Tile RepresentingBoardTile="tile" />
-                </div>
-            }
+        @foreach (BoardTile tile in RepresentingBoard.BoardComponents[$"0{i}"].BoardTiles)
+        {
+                <Tile RepresentingBoardTile="tile" />
+        }
     }
 </div>
+
+<script src="Scripts/SvgStyling.js"></script>
 
 @code {
     [Parameter] public Board RepresentingBoard { get; set; }
 
-    protected override async void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        base.OnAfterRender(firstRender);
-
         //If this is the first rendering, call the js function to apply appropriate grid styling
         if (firstRender)
         {
             await JS.InvokeVoidAsync("applyGridStyling", RepresentingBoard.BoardSize);
+            await JS.InvokeVoidAsync("createSvgs");
+            // await JS.InvokeVoidAsync("setTheme", "pink");
         }
     }
 

@@ -1,0 +1,33 @@
+<svg width="238" height="238" viewBox="0 0 238 238" fill="none" xmlns="http://www.w3.org/2000/svg"
+     class="board-tile-svg">
+    <g filter="url(#filter0_dd_31_2)">
+        <rect class="tile-square" x="7" y="3" width="224" height="224" rx="12" stroke="white" stroke-width="8"
+              shape-rendering="crispEdges" fill="url(#gradient-fill)"/>
+    </g>
+    <defs>
+        <linearGradient id="gradient-fill" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop id="gradient-start-color" style="stop-color:white" offset="0%"/>
+            <stop id="gradient-end-color" style="stop-color:white" offset="100%"/>
+        </linearGradient>
+
+        <filter id="filter0_dd_31_2" x="0" y="0" width="238" height="238" filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="4"/>
+            <feGaussianBlur stdDeviation="2"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_31_2"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="4"/>
+            <feGaussianBlur stdDeviation="2"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+            <feBlend mode="normal" in2="effect1_dropShadow_31_2" result="effect2_dropShadow_31_2"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_31_2" result="shape"/>
+        </filter>
+    </defs>
+</svg>
