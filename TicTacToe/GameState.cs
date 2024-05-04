@@ -19,6 +19,6 @@ namespace TicTacToe
         /// </summary>
         public Player? CurrentPlayer { get; set; }
 
-
+        public static void ClaimTile(string tileId) {}
     }
 }

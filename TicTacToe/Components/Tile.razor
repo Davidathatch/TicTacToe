@@ -1,26 +1,57 @@
-﻿@using System.Drawing
+﻿@using System.Diagnostics
+@using System.Drawing
 @using TicTacToe.Models
 @inject IJSRuntime JS
 
-<div class="tile-container" @onclick="() => RepresentingBoardTile.ClaimTile(new('X'))" id="@TileElementId">
-
+<div class="tile-container" style="grid-row: @RepresentingBoardTile.TilePosition.X; grid-column: @RepresentingBoardTile.TilePosition.Y;" id="@TileElementId" @onclick="TestClaim">
+    
+    @if (!RepresentingBoardTile.Claimed)
+    {
+        <object data="Assets/svgs/board-tile.svg" type="image/svg+xml" class="board-tile" id="@TileSvgId" style="pointer-events: none"></object>
+    }
+    else
+    {
+        <object data="Assets/svgs/claimed-square-@(RepresentingBoardTile.ClaimedBy!.Symbol).svg" type="image/svg+xml" class="board-tile" id="@TileSvgId" style="pointer-events: none"></object>
+    }
 </div>
 
 @code {
     [Parameter] public BoardTile RepresentingBoardTile { get; set; }
     public string TileElementId { get; set; }
-    private string ClaimingPlayerChar;
+    private string TileSvgId;
 
+    //True if the svg has been updated but not yet rendered
+    private bool SvgUpdated = false;
+    
     protected override void OnInitialized()
     {
         base.OnInitialized();
         RepresentingBoardTile.OnClaimed += TileClaimed;
         TileElementId = $"{RepresentingBoardTile.TilePosition.Y}-{RepresentingBoardTile.TilePosition.X}";
+        TileSvgId = $"{TileElementId}-svg";
     }
 
     private void TileClaimed(BoardTile claimedTile)
     {
-        ClaimingPlayerChar = claimedTile.ClaimedBy!.Symbol.ToString();
-        // JS.InvokeVoidAsync("applyClaimedTileStyling", TileElementId);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        /*
+         * If this is the first render, or if the render will be updating the svg, register the svg
+         * with js to be styled appropriately.
+         */
+        if (firstRender || SvgUpdated)
+        {
+            await JS.InvokeVoidAsync("registerSvg", TileSvgId);
+            SvgUpdated = false;
+        }
+    }
+
+    private async void TestClaim()
+    {
+        Player testPlayer = new('x');
+        RepresentingBoardTile.ClaimTile(testPlayer);
+        SvgUpdated = true;
     }
 }
