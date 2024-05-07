@@ -13,7 +13,7 @@
             OnComplete = onComplete;
 
             BoardTiles = new();
-            NonChallengedClaims = 0;
+            ClaimedTiles = 0;
         }
 
         /// <summary>
@@ -25,14 +25,19 @@
         /// The number of tiles in this component that have been claimed by a single
         /// player without competition.
         /// </summary>
-        public int NonChallengedClaims { get; set; }
+        public int ClaimedTiles { get; private set; }
+
+        /// <summary>
+        /// True until both players claim at least one tile in this component.
+        /// </summary>
+        public bool Uncontested { get; private set; } = true;
 
         /// <summary>
         /// Player who currently has claim over this component. It is claimed
         /// once a player claims one tile, and their claim remains until another
         /// player claims a tile in this component.
         /// </summary>
-        public Player? ClaimedBy { get; set; }
+        public Player? ClaimedBy { get; private set; }
 
         /// <summary>
         /// The index by which this component can be accessed in the Board class.
@@ -46,21 +51,25 @@
         /// Method to be called once this component has either been won, or has tiles
         /// claimed by two different players, making it unwinnable.
         /// </summary>
-        public Action<BoardComponent> OnComplete { get; set; }
+        private Action<BoardComponent> OnComplete { get; set; }
 
         /// <summary>
         /// Processes a newly claimed tile
         /// </summary>
         /// <param name="claimedTile">Tile that has been claimed</param>
-        public void ProcessTileClaim(BoardTile claimedTile)
+        private void ProcessTileClaim(BoardTile claimedTile)
         {
+            //If this component has already been contested, simply return.
+            if (!Uncontested)
+                return;
+            
             //This is the first tile within the component being claimed:
-            if (ClaimedBy is null)
+            if (ClaimedTiles == 0)
             {
                 ClaimedBy = claimedTile.ClaimedBy;
-                NonChallengedClaims++;
+                ClaimedTiles++;
 
-                if (NonChallengedClaims == BoardTiles.Count)
+                if (ClaimedTiles == BoardTiles.Count)
                 {
                     OnComplete(this);
                 }
@@ -71,10 +80,10 @@
             //This is not the first tile within this component being claimed, and it is being claimed by the same player:
             if (Equals(ClaimedBy, claimedTile.ClaimedBy))
             {
-                NonChallengedClaims++;
+                ClaimedTiles++;
 
                 //If this component has been entirely claimed by a single player, alert the board.
-                if (NonChallengedClaims == BoardTiles.Count)
+                if (ClaimedTiles == BoardTiles.Count)
                 {
                     OnComplete(this);
                 }
@@ -83,10 +92,10 @@
             }
 
             //This is not the first tile within this component being claimed, and it is being claimed by a different player:
-            NonChallengedClaims = 0;
+            ClaimedTiles++;
             ClaimedBy = null;
+            Uncontested = false;
             OnComplete(this);
-            return;
         }
 
         /// <summary>
@@ -105,6 +114,8 @@
         /// </summary>
         public void MarkAsWinner()
         {
+            ClaimedBy!.Winner = true;
+            
             foreach (BoardTile boardTile in BoardTiles)
             {
                 boardTile.WinningTile = true;

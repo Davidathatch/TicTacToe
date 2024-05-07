@@ -25,25 +25,31 @@ const themes = {
     "orange": orangeThemeColors
 };
 
-var currentTheme = blueThemeColors;
+//Current theme, pink by default. Index zero represents the theme's name
+var currentTheme = ['pink', pinkThemeColors];
 
-window.setTheme = (theme) => {
-    currentTheme = themes[theme];
-    // applyStartStyling();
-}
-
-window.onload = function() {
-    setTheme('pink');
-}
+// .NET INVOKABLE FUNCTIONS
 
 /**
- * Returns the file path of the svg representing a tile claimed by the player
- * with the given symbol.
- * @param playerSymbol Symbol representing player claiming this tile
- * @returns {string} File path the appropriate svg
+ * Sets the value of currentTheme.
+ * 
+ * Each theme is stored in the themes dictionary:
+ * Key = name of theme's color (ex: pink theme's key is 'pink')
+ * @param theme Key for desired key
  */
-function getTileSvg(playerSymbol) {
-    return `Assets/svgs/claimed-square-${playerSymbol}`;
+window.setTheme = (theme) => {
+    if (!themes.hasOwnProperty(theme))
+        return false;
+    
+    //Remove the current theme from the body
+    let body = document.getElementsByTagName('body')[0];
+    body.classList.remove(getThemeClassName(currentTheme[0]));
+    
+    //Update currentTheme
+    currentTheme = [theme, themes[theme]];
+    body.classList.add(getThemeClassName(currentTheme[0]))
+    
+    return true;
 }
 
 /**
@@ -54,6 +60,29 @@ function getTileSvg(playerSymbol) {
  */
 window.registerSvg = (svgId) => {
     document.getElementById(svgId).addEventListener('load', applyTileGradient);
+    return true;
+}
+
+
+// PRIVATE FUNCTIONS
+
+/**
+ * Returns the file path of the svg representing a tile claimed by the player
+ * with the given symbol.
+ * @param playerSymbol Symbol representing player claiming this tile
+ * @returns {string} File path the appropriate svg
+ */
+function getTileSvgPath(playerSymbol) {
+    return `Assets/svgs/claimed-square-${playerSymbol.toLowerCase()}`;
+}
+
+/**
+ * Returns the class name that contains the colors for a desired theme in styles.css.
+ * @param themeName Name of the theme
+ * @returns {string} Class name correlating to desired theme
+ */
+function getThemeClassName(themeName) {
+    return `${themeName}-theme`;
 }
 
 /**
@@ -63,6 +92,6 @@ window.registerSvg = (svgId) => {
  */
 function applyTileGradient(e) {
     var tileDoc = e.currentTarget.contentDocument;
-    tileDoc.getElementById("gradient-start-color").setAttribute('style', `stop-color:${currentTheme.primary}`);
+    tileDoc.getElementById("gradient-start-color").setAttribute('style', `stop-color:${currentTheme[1].primary}`);
     tileDoc.getElementById("gradient-end-color").setAttribute('style', `stop-color:white`);
 }

@@ -13,23 +13,5 @@
     }
 </div>
 @code {
-    [Parameter] public Board RepresentingBoard { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        //If this is the first rendering, call the js function to apply appropriate grid styling
-        if (firstRender)
-        {
-            // await JS.InvokeVoidAsync("applyGridStyling", RepresentingBoard.BoardSize);
-            // await JS.InvokeVoidAsync("createSvgs");
-            // await JS.InvokeVoidAsync("setTheme", "pink");
-        }
-    }
-
-    [JSInvokable]
-    public static bool HandleTileClicked(string tileId)
-    {
-        Debug.WriteLine($"Tile with id {tileId} was clicked");
-        return true;
-    }
+    [Parameter] public required Board RepresentingBoard { get; set; }
 }

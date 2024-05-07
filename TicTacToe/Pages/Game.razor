@@ -2,7 +2,7 @@
 @using TicTacToe.Components
 @using TicTacToe.Models
 
-@page "/"
+@page "/play"
 
 <PageTitle>Home</PageTitle>
 
@@ -11,16 +11,14 @@
     <img id="bg-image-tr" class="bg-image" src="Assets/Donut.svg"/>
     <img id="bg-image-bl" class="bg-image" src="Assets/Donut.svg"/>
     <img id="bg-image-br" class="bg-image" src="Assets/Squiggle.svg"/>
-    <BoardGrid RepresentingBoard="testBoard"/>
+    <BoardGrid RepresentingBoard="State.GameBoard"/>
 </div>
 
 @code {
 
-    public Player testPlayer { get; set; } = new('X');
-    public Board testBoard { get; set; } = new(3);
+    [Parameter] public required GameState State { get; set; }
 
     protected override async void OnAfterRender(bool firstRender)
     {
-        Debug.WriteLine("In home.razor");
     }
 }

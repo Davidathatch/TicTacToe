@@ -1,27 +1,30 @@
 ﻿@using System.Diagnostics
 @using System.Drawing
 @using TicTacToe.Models
-@inject IJSRuntime JS
+@using TicTacToe.Models.ConstantModels
+@using TicTacToe.Services
+@inject JsStylingFunctions JS
+@inject GameConstants GameConstants
 
 <div class="tile-container" style="grid-row: @RepresentingBoardTile.TilePosition.X; grid-column: @RepresentingBoardTile.TilePosition.Y;" id="@TileElementId" @onclick="TestClaim">
     
     @if (!RepresentingBoardTile.Claimed)
     {
-        <object data="Assets/svgs/board-tile.svg" type="image/svg+xml" class="board-tile" id="@TileSvgId" style="pointer-events: none"></object>
+        <object data="@(GameConstants.SvgPaths.BlankTile)" type="image/svg+xml" class="board-tile" id="@TileSvgId" style="pointer-events: none"></object>
     }
     else
     {
-        <object data="Assets/svgs/claimed-square-@(RepresentingBoardTile.ClaimedBy!.Symbol).svg" type="image/svg+xml" class="board-tile" id="@TileSvgId" style="pointer-events: none"></object>
+        <object data="@(GameConstants.SvgPaths.GetPathFor(RepresentingBoardTile.ClaimedBy!))" type="image/svg+xml" class="board-tile" id="@TileSvgId" style="pointer-events: none"></object>
     }
 </div>
 
 @code {
-    [Parameter] public BoardTile RepresentingBoardTile { get; set; }
-    public string TileElementId { get; set; }
+    [Parameter] public required BoardTile RepresentingBoardTile { get; set; }
+    private string TileElementId { get; set; }
     private string TileSvgId;
 
     //True if the svg has been updated but not yet rendered
-    private bool SvgUpdated = false;
+    private bool _svgUpdated = false;
     
     protected override void OnInitialized()
     {
@@ -41,10 +44,10 @@
          * If this is the first render, or if the render will be updating the svg, register the svg
          * with js to be styled appropriately.
          */
-        if (firstRender || SvgUpdated)
+        if (firstRender || _svgUpdated)
         {
-            await JS.InvokeVoidAsync("registerSvg", TileSvgId);
-            SvgUpdated = false;
+            await JS.RegisterSvgTile(TileSvgId);
+            _svgUpdated = false;
         }
     }
 
@@ -52,6 +55,6 @@
     {
         Player testPlayer = new('x');
         RepresentingBoardTile.ClaimTile(testPlayer);
-        SvgUpdated = true;
+        _svgUpdated = true;
     }
 }

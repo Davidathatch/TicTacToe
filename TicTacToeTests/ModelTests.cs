@@ -147,13 +147,13 @@ namespace TicTacToe.Tests
                 {
                     BoardComponent currentRow = newBoard.BoardComponents[$"0{rowIndex}"];
                     Assert.IsNull(currentRow.ClaimedBy);
-                    Assert.AreEqual(0, currentRow.NonChallengedClaims);
+                    Assert.AreEqual(0, currentRow.ClaimedTiles);
                     
                     //Mark all the tiles in this row as claimed by player one
                     for (int tileIndex = 1; tileIndex <= siz; tileIndex++)
                     {
                         newBoard.BoardTiles[new Point(tileIndex, rowIndex)].ClaimTile(testPlayer);
-                        Assert.AreEqual(tileIndex, currentRow.NonChallengedClaims);
+                        Assert.AreEqual(tileIndex, currentRow.ClaimedTiles);
                     }
                     
                     //Check that the row was completely claimed, and was therefore removed from the board
@@ -172,13 +172,13 @@ namespace TicTacToe.Tests
                 {
                     BoardComponent currentColumn = newBoard.BoardComponents[$"1{columnIndex}"];
                     Assert.IsNull(currentColumn.ClaimedBy);
-                    Assert.AreEqual(0, currentColumn.NonChallengedClaims);
+                    Assert.AreEqual(0, currentColumn.ClaimedTiles);
                     
                     //Mark all the tiles in this column as claimed by player one
                     for (int tileIndex = 1; tileIndex <= siz; tileIndex++)
                     {
                         newBoard.BoardTiles[new Point(columnIndex, tileIndex)].ClaimTile(testPlayer);
-                        Assert.AreEqual(tileIndex, currentColumn.NonChallengedClaims);
+                        Assert.AreEqual(tileIndex, currentColumn.ClaimedTiles);
                     }
                     
                     //Check that the column was completely claimed, and was therefore removed from the board
@@ -195,12 +195,12 @@ namespace TicTacToe.Tests
                 //Loop through the left to right diagonal
                 BoardComponent ltrComponent = newBoard.BoardComponents["2ltr"];
                 Assert.IsNull(ltrComponent.ClaimedBy);
-                Assert.AreEqual(0, ltrComponent.NonChallengedClaims);
+                Assert.AreEqual(0, ltrComponent.ClaimedTiles);
                 
                 for (int tileIndex = 1; tileIndex <= siz; tileIndex++)
                 {
                     newBoard.BoardTiles[new Point(tileIndex, tileIndex)].ClaimTile(testPlayer);
-                    Assert.AreEqual(tileIndex, ltrComponent.NonChallengedClaims);
+                    Assert.AreEqual(tileIndex, ltrComponent.ClaimedTiles);
                 }
                 
                 //Check that the diagonal was completely claimed, and was therefore removed from the board
@@ -213,12 +213,12 @@ namespace TicTacToe.Tests
                 //Loop through the right to left diagonal
                 BoardComponent rtlComponent = newBoard.BoardComponents["2rtl"];
                 Assert.IsNull(rtlComponent.ClaimedBy);
-                Assert.AreEqual(0, rtlComponent.NonChallengedClaims);
+                Assert.AreEqual(0, rtlComponent.ClaimedTiles);
                 
                 for (int tileIndex = 1; tileIndex <= siz; tileIndex++)
                 {
                     newBoard.BoardTiles[new Point(siz - (tileIndex - 1), tileIndex)].ClaimTile(testPlayer);
-                    Assert.AreEqual(tileIndex, rtlComponent.NonChallengedClaims);
+                    Assert.AreEqual(tileIndex, rtlComponent.ClaimedTiles);
                 }
                 
                 //Check that the diagonal was completely claimed, and was therefore removed from the board

@@ -1,0 +1,78 @@
+﻿@page "/"
+@using TicTacToe.Models
+@using TicTacToe.Models.ConstantModels
+@using TicTacToe.Services
+@inject JsStylingFunctions JS
+@inject GameConstants GameConstants
+@inject NavigationManager Navigation
+<PageTitle>Game Options</PageTitle>
+
+<main class="theme-crossfade">
+    <div id="game-preferences-container">
+        <h1 class="title primary-gradient-box theme-crossfade">Tic Tac Toe</h1>
+
+        <div id="player-options-section">
+            <div class="player-options-container primary-gradient-box theme-crossfade">
+                <h2>Player One</h2>
+                <div class="player-options">
+                    <div class="player-symbol theme-crossfade @(_playerOneSymbol == 'x' ? "player-symbol-selected" : "")" 
+                         @onclick="() => UpdatePlayerSymbol(ref _playerOneSymbol, ref _playerTwoSymbol, 'x')"><h1>X</h1></div>
+                    <div class="player-symbol theme-crossfade @(_playerOneSymbol == 'o' ? "player-symbol-selected" : "")"
+                         @onclick="() => UpdatePlayerSymbol(ref _playerOneSymbol, ref _playerTwoSymbol, 'o')"><h1>O</h1></div>
+                </div>
+            </div>
+
+            <div class="player-options-container primary-gradient-box theme-crossfade">
+                <h2>Player Two</h2>
+                <div class="player-options">
+                    <div class="player-symbol theme-crossfade @(_playerTwoSymbol == 'x' ? "player-symbol-selected" : "")"
+                         @onclick="() => UpdatePlayerSymbol(ref _playerTwoSymbol, ref _playerOneSymbol, 'x')"><h1>X</h1></div>
+                    <div class="player-symbol theme-crossfade @(_playerTwoSymbol == 'o' ? "player-symbol-selected" : "")"
+                         @onclick="() => UpdatePlayerSymbol(ref _playerTwoSymbol, ref _playerOneSymbol, 'o')"><h1>O</h1></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="submit-section">
+            <div class="submit-button primary-gradient-box theme-crossfade" @onclick="OnPreferencesSubmitted">Submit</div>
+        </div>
+    </div>
+
+    <div id="theme-preferences-container">
+        <div class="theme-option pink-theme" id="pink-theme-option" 
+             @onclick="() => ThemeSelected(Models.ConstantModels.GameConstants.ThemeValues.PinkTheme)"><h2>Pink</h2></div>
+        <div class="theme-option blue-theme" id="blue-theme-option" 
+             @onclick="() => ThemeSelected(Models.ConstantModels.GameConstants.ThemeValues.BlueTheme)"><h2>Blue</h2></div>
+        <div class="theme-option orange-theme" id="orange-theme-option" 
+             @onclick="() => ThemeSelected(Models.ConstantModels.GameConstants.ThemeValues.OrangeTheme)"><h2>Orange</h2></div>
+    </div>
+</main>
+
+@code {
+    private char _playerOneSymbol = 'x';
+    private char _playerTwoSymbol = 'o';
+    
+    private async void ThemeSelected(string themeValue)
+    {
+        await JS.SetTheme(themeValue);
+    }
+    
+    private void UpdatePlayerSymbol(ref char changingPlayer, ref char otherPlayer, char changeTo)
+    {
+        //If attempting to change to the same value, do nothing
+        if (changingPlayer.Equals(changeTo))
+        {
+            return;
+        }
+
+        //Otherwise, update the player's symbols
+        otherPlayer = changingPlayer;
+        changingPlayer = changeTo;
+    }
+
+    private void OnPreferencesSubmitted()
+    {
+        GameState gameState = new(new Player(_playerOneSymbol), new Player(_playerTwoSymbol), 3);
+        Navigation.NavigateTo("/play");
+    }
+}

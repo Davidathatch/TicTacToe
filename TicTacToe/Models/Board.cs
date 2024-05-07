@@ -104,9 +104,15 @@ namespace TicTacToe.Models
         public bool GameOver { get; set; }
 
         /// <summary>
-        /// Player whose turn it currently is.
+        /// If the game has been won, this property will reference the
+        /// winning component.
         /// </summary>
-        public Player? CurrentPlayer { get; set; }
+        public BoardComponent? WinningComponent { get; set; }
+
+        /// <summary>
+        /// Invoked once a component is won or all winnable components are gone.
+        /// </summary>
+        public event Action OnGameOver;
 
         /// <summary>
         /// Takes a completed component and removes it from the dictionary.
@@ -117,11 +123,18 @@ namespace TicTacToe.Models
             BoardComponents.Remove(completedComponent.BoardIndex);
 
             //If the component has been completed and is still claimed by a player, then that player has won.
-            if (completedComponent.ClaimedBy is not null && completedComponent.NonChallengedClaims > 0)
+            if (completedComponent.Uncontested && completedComponent.ClaimedTiles == completedComponent.BoardTiles.Count)
             {
                 GameOver = true;
-                completedComponent.ClaimedBy.Winner = true;
                 completedComponent.MarkAsWinner();
+                WinningComponent = completedComponent;
+                OnGameOver?.Invoke();
+            }
+            //Otherwise, check that there are still components capable of being won. If there aren't any, end the game.
+            else if (BoardComponents.Count == 0)
+            {
+                GameOver = true;
+                OnGameOver?.Invoke();
             }
         }
     }
