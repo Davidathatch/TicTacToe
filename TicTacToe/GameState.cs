@@ -4,6 +4,8 @@ namespace TicTacToe
 {
     public class GameState
     {
+        //TODO: Keep track of stats for successive games
+
         /// <summary>
         /// Player one.
         /// </summary>
@@ -39,6 +41,11 @@ namespace TicTacToe
         /// The board the game is being played on.
         /// </summary>
         public Board GameBoard { get; set; }
+
+        /// <summary>
+        /// Invoked when this state is restarted.
+        /// </summary>
+        public event Action OnRestart;
 
         /// <summary>
         /// Create a new GameState
@@ -90,6 +97,23 @@ namespace TicTacToe
 
             //Otherwise, the game ended in a tie.
             GameStatus = 2;
+        }
+
+        /// <summary>
+        /// Restarts this state in preparation for another game.
+        /// </summary>
+        /// <param name="onRestart">Method to be called once the state has been reset</param>
+        public void Restart()
+        {
+            //Reset the starting player
+            CurrentPlayer = PlayerOne;
+
+            //Reset the board
+            GameBoard.ResetBoard();
+
+            //Set the status
+            GameStatus = 0;
+            OnRestart?.Invoke();
         }
     }
 }
