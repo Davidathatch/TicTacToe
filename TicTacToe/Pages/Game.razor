@@ -1,15 +1,11 @@
 ﻿@using TicTacToe.Components
 @using TicTacToe.Services
 @inject GameStateService StateService
+@inject JsStylingFunctions JS
 
 @page "/play"
 
 <PageTitle>Home</PageTitle>
-
-@* @if (StateService.State!.GameStatus > 0) *@
-@* { *@
-@*     <GameOverDialog></GameOverDialog> *@
-@* } *@
 
 <div id="home-page">
     <img id="bg-image-tl" class="bg-image" src="Assets/Squiggle.svg" alt="Decorative squiggle"/>
@@ -19,14 +15,20 @@
     <BoardGrid RepresentingBoard="StateService.State!.GameBoard"/>
 </div>
 
+@if (StateService.State!.GameStatus > 0)
+{
+    <GameOverDialog></GameOverDialog>
+}
+
 @code {
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        StateService.State!.GameBoard.OnGameOver += OnGameOver;
+        StateService.State!.GameBoard.OnGameOver += OnGameStatusChange;
+        StateService.State!.OnRestart += OnGameStatusChange;
     }
 
-    private void OnGameOver()
+    private void OnGameStatusChange()
     {
         InvokeAsync(StateHasChanged);
     }

@@ -59,8 +59,18 @@ window.setTheme = (theme) => {
  * @param svgId id of the svg object
  */
 window.registerSvg = (svgId) => {
-    document.getElementById(svgId).addEventListener('load', applyTileGradient);
+    document.getElementById(svgId).addEventListener('load', (e) => { applyGradientToLoaded(svgId); });
     return true;
+}
+
+/**
+ * Applies the correct gradient fill to a svg that has already been loaded.
+ * @param {any} svgId Id of the svg being altered
+ */
+window.applyGradientToLoaded = (svgId) => {
+    let svgDoc = document.getElementById(svgId).contentDocument;
+    svgDoc.getElementById("gradient-start-color").setAttribute('style', `stop-color:${currentTheme[1]['primary']}`);
+    svgDoc.getElementById("gradient-end-color").setAttribute('style', `stop-color:white`);
 }
 
 
@@ -80,8 +90,6 @@ function getThemeClassName(themeName) {
  * correct gradient fill.
  * @param e Event the invoked this function
  */
-function applyTileGradient(e) {
-    var tileDoc = e.currentTarget.contentDocument;
-    tileDoc.getElementById("gradient-start-color").setAttribute('style', `stop-color:${currentTheme[1]['primary']}`);
-    tileDoc.getElementById("gradient-end-color").setAttribute('style', `stop-color:white`);
+function applyTileGradientOnLoad(e) {
+    applyGradientToLoaded(e.id);
 }

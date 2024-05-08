@@ -128,13 +128,9 @@ main {
     cursor: pointer;
 }
 
-.player-symbol-selected {
-    border: 4px solid var(--primary);
-}
+.player-symbol-selected { border: 4px solid var(--primary); }
 
-.game-option-selected {
-    box-shadow: none;
-}
+.game-option-selected { box-shadow: none; }
 
 .player-symbol > h1 {
     margin: 0;
@@ -142,9 +138,7 @@ main {
     align-self: center;
 }
 
-#submit-section {
-    grid-row: 3;
-}
+#submit-section { grid-row: 3; }
 
 .submit-button {
     max-width: 100px;
@@ -182,9 +176,7 @@ main {
     cursor: pointer;
 }
 
-.theme-option:hover {
-    box-shadow: none;
-}
+.theme-option:hover { box-shadow: none; }
 
 .theme-option > h2 {
     align-self: center;
@@ -195,22 +187,17 @@ main {
 }
 
 @media (max-height: 700px) {
-    #game-preferences-container > .title {
-        font-size: 2em;
-    }
-    
-    .theme-option {
-        font-size: .75em;
-    }
+    #game-preferences-container > .title { font-size: 2em; }
+
+    .theme-option { font-size: .75em; }
 }
 
 @media (max-height: 650px) {
-    #player-options-section {
-        max-height: 175px;
-    }
+    #player-options-section { max-height: 175px; }
 }
 
 /*GAME PAGE*/
+
 #home-page {
     display: flex;
     align-content: center;
@@ -220,9 +207,7 @@ main {
     overflow: hidden;
 }
 
-.bg-image {
-    position: absolute;
-}
+.bg-image { position: absolute; }
 
 #bg-image-tl {
     top: 5%;
@@ -287,10 +272,51 @@ main {
     height: 100%;
 }
 
-.claimed-svg svg path {
-    fill: blue;
+.claimed-svg svg path { fill: blue; }
+
+.board-tile-claimed { fill: url(#claimed-tile-gradient); }
+
+#game-over-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vmin;
+    height: 50vmin;
+    aspect-ratio: 1/1;
+    background: linear-gradient(133deg, rgba(255, 255, 255, 0.66) 0%, rgba(255, 255, 255, 0.28) 100%);
+    box-shadow: 3px 4px 4px 0 rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(7.5px);
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary);
 }
 
-.board-tile-claimed {
-    fill: url(#claimed-tile-gradient);
+#game-over-dialog > h1 {
+    font-size: 3.2em;
+    margin: 0;
+    filter: brightness(50%);
 }
+
+#game-over-dialog > h2 {
+    font-size: 2em;
+    margin: 0;
+    filter: brightness(75%);
+}
+
+.dialog-option-buttons > button {
+    padding: 10px 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.dialog-option-buttons > button:hover { filter: brightness(75%); }

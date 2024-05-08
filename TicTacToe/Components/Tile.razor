@@ -7,22 +7,22 @@
 @inject GameConstants GameConstants
 @inject GameStateService StateService
 
-<div class="tile-container" style="grid-row: @RepresentingBoardTile.TilePosition.X; grid-column: @RepresentingBoardTile.TilePosition.Y;" id="@TileElementId" @onclick="OnTileClicked">
+<div class="tile-container" style="grid-row: @RepresentingBoardTile.TilePosition.X; grid-column: @RepresentingBoardTile.TilePosition.Y;" id="@_tileElementId" @onclick="OnTileClicked">
     
     @if (!RepresentingBoardTile.Claimed)
     {
-        <object data="@(GameConstants.SvgPaths.BlankTile)" type="image/svg+xml" class="board-tile" id="@TileSvgId" style="pointer-events: none"></object>
+        <object data="@(GameConstants.SvgPaths.BlankTile)" type="image/svg+xml" class="board-tile" id="@_tileSvgId" style="pointer-events: none"></object>
     }
     else
     {
-        <object data="@(GameConstants.SvgPaths.GetPathFor(RepresentingBoardTile.ClaimedBy!))" type="image/svg+xml" class="board-tile" id="@TileSvgId" style="pointer-events: none"></object>
+        <object data="@(GameConstants.SvgPaths.GetPathFor(RepresentingBoardTile.ClaimedBy!))" type="image/svg+xml" class="board-tile" id="@_tileSvgId" style="pointer-events: none"></object>
     }
 </div>
 
 @code {
     [Parameter] public required BoardTile RepresentingBoardTile { get; set; }
-    private string TileElementId { get; set; }
-    private string TileSvgId;
+    private string _tileElementId { get; set; }
+    private string _tileSvgId;
 
     //True if the svg has been updated but not yet rendered
     private bool _svgUpdated = false;
@@ -30,14 +30,9 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        RepresentingBoardTile.OnClaimed += TileClaimed;
-        TileElementId = $"{RepresentingBoardTile.TilePosition.Y}-{RepresentingBoardTile.TilePosition.X}";
-        TileSvgId = $"{TileElementId}-svg";
-    }
-
-    private void TileClaimed(BoardTile claimedTile)
-    {
-        
+        _tileElementId = $"{RepresentingBoardTile.TilePosition.Y}-{RepresentingBoardTile.TilePosition.X}";
+        _tileSvgId = $"{_tileElementId}-svg";
+        StateService.State!.OnRestart += OnGameRestart;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -48,7 +43,7 @@
          */
         if (firstRender || _svgUpdated)
         {
-            await JS.RegisterSvgTile(TileSvgId);
+            await JS.RegisterSvgTile(_tileSvgId);
             _svgUpdated = false;
         }
     }
@@ -57,6 +52,12 @@
     {
         var claimingPlayer = StateService.State!.RegisterTurn();
         RepresentingBoardTile.ClaimTile(claimingPlayer);
+        _svgUpdated = true;
+    }
+
+    private void OnGameRestart()
+    {
+        // JS.ApplyGradientToLoaded(_tileSvgId);
         _svgUpdated = true;
     }
 }

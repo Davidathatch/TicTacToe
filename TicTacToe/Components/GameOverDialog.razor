@@ -1,13 +1,27 @@
-﻿<div id="game-over-dialog">
+﻿@using TicTacToe.Services
+@inject GameStateService StateService
+@inject NavigationManager Navigation
+
+<div id="game-over-dialog">
     <h1>Game Over</h1>
-    <h2>Result</h2>
+    <h2>@(char.ToUpper(StateService.State!.Winner!.Symbol) + " Won")</h2>
     
     <div class="dialog-option-buttons">
-        <button>Home</button>
-        <button>Play Again</button>
+        <button @onclick="OnHomeClicked">Home</button>
+        <button @onclick="OnPlayAgainClicked">Play Again</button>
     </div>
 </div>
 
-@code {
-    
+@code
+{
+    private void OnPlayAgainClicked()
+    {
+        StateService.State!.Restart();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnHomeClicked()
+    {
+        Navigation.NavigateTo("/");
+    }
 }

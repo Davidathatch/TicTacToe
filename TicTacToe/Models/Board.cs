@@ -142,5 +142,19 @@ namespace TicTacToe.Models
                 OnGameOver?.Invoke();
             }
         }
+
+        /// <summary>
+        /// Resets the board in preparation for a new game.
+        /// </summary>
+        public void ResetBoard()
+        {
+            BoardComponents = new();
+            BoardTiles = new();
+            GameOver = false;
+            GenerateBoard(BoardSize);
+            _unwinnableComponents = 0;
+            WinningComponent = null;
+
+        }
     }
 }

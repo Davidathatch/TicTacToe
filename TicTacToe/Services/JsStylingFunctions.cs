@@ -34,4 +34,14 @@ public class JsStylingFunctions(IJSRuntime jS)
     {
         return await jS.InvokeAsync<bool>("setTheme", themeValue);
     }
+
+    /// <summary>
+    /// Takes the id of a svg object that has already loaded on the client and applies
+    /// a gradient fill.
+    /// </summary>
+    /// <param name="svgId">Id of svg being altered</param>
+    public async void ApplyGradientToLoaded(string svgId)
+    {
+        await jS.InvokeVoidAsync("applyGradientToLoaded", svgId);
+    }
 }
