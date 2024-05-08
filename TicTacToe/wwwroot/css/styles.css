@@ -153,6 +153,7 @@ main {
     font-size: 2em;
     font-weight: bold;
     margin: 0 auto;
+    cursor: pointer;
 }
 
 #theme-preferences-container {

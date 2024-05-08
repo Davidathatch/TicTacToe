@@ -88,6 +88,11 @@ namespace TicTacToe.Models
         public Dictionary<string, BoardComponent> BoardComponents { get; set; }
 
         /// <summary>
+        /// Tracks the number of components that are no longer winnable.
+        /// </summary>
+        private int _unwinnableComponents = 0;
+
+        /// <summary>
         /// Size of this board. Each component will contain this number of tiles.
         /// </summary>
         public int BoardSize { get; set; }
@@ -120,7 +125,7 @@ namespace TicTacToe.Models
         /// <param name="completedComponent"></param>
         public void ProcessComponentComplete(BoardComponent completedComponent)
         {
-            BoardComponents.Remove(completedComponent.BoardIndex);
+            _unwinnableComponents++;
 
             //If the component has been completed and is still claimed by a player, then that player has won.
             if (completedComponent.Uncontested && completedComponent.ClaimedTiles == completedComponent.BoardTiles.Count)
@@ -131,7 +136,7 @@ namespace TicTacToe.Models
                 OnGameOver?.Invoke();
             }
             //Otherwise, check that there are still components capable of being won. If there aren't any, end the game.
-            else if (BoardComponents.Count == 0)
+            else if (_unwinnableComponents == BoardComponents.Count)
             {
                 GameOver = true;
                 OnGameOver?.Invoke();

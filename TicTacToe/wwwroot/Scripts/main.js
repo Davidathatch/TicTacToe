@@ -67,16 +67,6 @@ window.registerSvg = (svgId) => {
 // PRIVATE FUNCTIONS
 
 /**
- * Returns the file path of the svg representing a tile claimed by the player
- * with the given symbol.
- * @param playerSymbol Symbol representing player claiming this tile
- * @returns {string} File path the appropriate svg
- */
-function getTileSvgPath(playerSymbol) {
-    return `Assets/svgs/claimed-square-${playerSymbol.toLowerCase()}`;
-}
-
-/**
  * Returns the class name that contains the colors for a desired theme in styles.css.
  * @param themeName Name of the theme
  * @returns {string} Class name correlating to desired theme
@@ -92,6 +82,6 @@ function getThemeClassName(themeName) {
  */
 function applyTileGradient(e) {
     var tileDoc = e.currentTarget.contentDocument;
-    tileDoc.getElementById("gradient-start-color").setAttribute('style', `stop-color:${currentTheme[1].primary}`);
+    tileDoc.getElementById("gradient-start-color").setAttribute('style', `stop-color:${currentTheme[1]['primary']}`);
     tileDoc.getElementById("gradient-end-color").setAttribute('style', `stop-color:white`);
 }

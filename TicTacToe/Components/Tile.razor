@@ -5,8 +5,9 @@
 @using TicTacToe.Services
 @inject JsStylingFunctions JS
 @inject GameConstants GameConstants
+@inject GameStateService StateService
 
-<div class="tile-container" style="grid-row: @RepresentingBoardTile.TilePosition.X; grid-column: @RepresentingBoardTile.TilePosition.Y;" id="@TileElementId" @onclick="TestClaim">
+<div class="tile-container" style="grid-row: @RepresentingBoardTile.TilePosition.X; grid-column: @RepresentingBoardTile.TilePosition.Y;" id="@TileElementId" @onclick="OnTileClicked">
     
     @if (!RepresentingBoardTile.Claimed)
     {
@@ -36,6 +37,7 @@
 
     private void TileClaimed(BoardTile claimedTile)
     {
+        
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -51,10 +53,10 @@
         }
     }
 
-    private async void TestClaim()
+    private void OnTileClicked()
     {
-        Player testPlayer = new('x');
-        RepresentingBoardTile.ClaimTile(testPlayer);
+        var claimingPlayer = StateService.State!.RegisterTurn();
+        RepresentingBoardTile.ClaimTile(claimingPlayer);
         _svgUpdated = true;
     }
 }

@@ -1,24 +1,33 @@
-﻿@using System.Diagnostics
-@using TicTacToe.Components
-@using TicTacToe.Models
+﻿@using TicTacToe.Components
+@using TicTacToe.Services
+@inject GameStateService StateService
 
 @page "/play"
 
 <PageTitle>Home</PageTitle>
 
+@* @if (StateService.State!.GameStatus > 0) *@
+@* { *@
+@*     <GameOverDialog></GameOverDialog> *@
+@* } *@
+
 <div id="home-page">
-    <img id="bg-image-tl" class="bg-image" src="Assets/Squiggle.svg"/>
-    <img id="bg-image-tr" class="bg-image" src="Assets/Donut.svg"/>
-    <img id="bg-image-bl" class="bg-image" src="Assets/Donut.svg"/>
-    <img id="bg-image-br" class="bg-image" src="Assets/Squiggle.svg"/>
-    <BoardGrid RepresentingBoard="State.GameBoard"/>
+    <img id="bg-image-tl" class="bg-image" src="Assets/Squiggle.svg" alt="Decorative squiggle"/>
+    <img id="bg-image-tr" class="bg-image" src="Assets/Donut.svg" alt="Decorative circle with hole in center"/>
+    <img id="bg-image-bl" class="bg-image" src="Assets/Donut.svg" alt="Decorative circle with hole in center"/>
+    <img id="bg-image-br" class="bg-image" src="Assets/Squiggle.svg" alt="Decorative squiggle"/>
+    <BoardGrid RepresentingBoard="StateService.State!.GameBoard"/>
 </div>
 
 @code {
-
-    [Parameter] public required GameState State { get; set; }
-
-    protected override async void OnAfterRender(bool firstRender)
+    protected override void OnInitialized()
     {
+        base.OnInitialized();
+        StateService.State!.GameBoard.OnGameOver += OnGameOver;
+    }
+
+    private void OnGameOver()
+    {
+        InvokeAsync(StateHasChanged);
     }
 }

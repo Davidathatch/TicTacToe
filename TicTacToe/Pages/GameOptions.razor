@@ -3,8 +3,8 @@
 @using TicTacToe.Models.ConstantModels
 @using TicTacToe.Services
 @inject JsStylingFunctions JS
-@inject GameConstants GameConstants
 @inject NavigationManager Navigation
+@inject GameStateService StateService
 <PageTitle>Game Options</PageTitle>
 
 <main class="theme-crossfade">
@@ -72,7 +72,7 @@
 
     private void OnPreferencesSubmitted()
     {
-        GameState gameState = new(new Player(_playerOneSymbol), new Player(_playerTwoSymbol), 3);
+        StateService.State = new(new Player(_playerOneSymbol), new Player(_playerTwoSymbol), 3);
         Navigation.NavigateTo("/play");
     }
 }

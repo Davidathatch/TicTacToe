@@ -1,4 +1,6 @@
-﻿namespace TicTacToe.Models.ConstantModels;
+﻿using System.Diagnostics;
+
+namespace TicTacToe.Models.ConstantModels;
 
 /// <summary>
 /// This class contains constant string values used throughout the app.
@@ -30,7 +32,7 @@ public class GameConstants
         /// <returns>File path to appropriate svg</returns>
         public static string GetPathFor(Player claimingPlayer)
         {
-            return $"Assets/svgs/claimed-square-{char.ToLower(claimingPlayer.Symbol)}";
+            return $"Assets/svgs/claimed-square-{char.ToLower(claimingPlayer.Symbol)}.svg";
         }
     }
 }

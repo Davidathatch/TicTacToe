@@ -16,4 +16,7 @@ builder.Services.AddSingleton<JsStylingFunctions>();
 //Config contains string values used across the app
 builder.Services.AddSingleton<GameConstants>();
 
+//Holds the game state
+builder.Services.AddSingleton<GameStateService>();
+
 await builder.Build().RunAsync();
