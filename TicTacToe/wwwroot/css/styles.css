@@ -256,6 +256,24 @@ main {
     justify-content: center;
     align-content: center;
     padding: 10%;
+
+    perspective: 500px;
+}
+
+.tile-body {
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.tile-front, .tile-back {
+    backface-visibility: hidden;
+}
+
+.tile-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotateY(180deg);
 }
 
 .board-tile {

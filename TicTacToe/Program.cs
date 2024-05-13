@@ -10,8 +10,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-//JsStylingFunctions is used to call JS functions that alter the game's visuals
-builder.Services.AddSingleton<JsStylingFunctions>();
+//JsInteropFunctions is used to call JS functions that alter the game's visuals
+builder.Services.AddSingleton<JsInteropFunctions>();
 
 //Config contains string values used across the app
 builder.Services.AddSingleton<GameConstants>();

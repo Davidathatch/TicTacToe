@@ -73,6 +73,35 @@ window.applyGradientToLoaded = (svgId) => {
     svgDoc.getElementById("gradient-end-color").setAttribute('style', `stop-color:white`);
 }
 
+/**
+ * Applies a card turning animation to the svg object with the given id.
+ * @param {any} svgId Id of the svg object
+ */
+window.invokeTileFlipAnimation = (svgId) => {
+    var tile = document.getElementById(svgId);
+
+    anime({
+        targets: tile,
+        scale: [{ value: 1 }, { value: 1.4 }, { value: 1, delay: 250 }],
+        rotateY: { value: "+=180", delay: 200 },
+        easing: "easeInOutSine",
+        duration: 400
+    });
+}
+
+/**
+ * Resets a claimed tile in preparation for a new round.
+ * @param {any} svgId Id of the tile being reset
+ */
+window.resetTile = (svgId) => {
+    var tile = document.getElementById(svgId);
+
+    anime({
+        targets: tile,
+        rotateY: { value: "-=180" },
+        duration: 0
+    });
+}
 
 // PRIVATE FUNCTIONS
 
