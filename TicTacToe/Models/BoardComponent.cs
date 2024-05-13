@@ -6,11 +6,11 @@
         /// Creates a new board component with no tiles.
         /// </summary>
         /// <param name="boardIndex">Value for <see cref="BoardIndex"/></param>
-        /// <param name="onComplete">Value for <see cref="OnComplete"/></param>
-        public BoardComponent(string boardIndex, Action<BoardComponent> onComplete)
+        /// <param name="onFullyClaimed">Value for <see cref="OnFullyClaimed"/></param>
+        public BoardComponent(string boardIndex, Action<BoardComponent> onFullyClaimed)
         {
             BoardIndex = boardIndex;
-            OnComplete = onComplete;
+            OnFullyClaimed = onFullyClaimed;
 
             BoardTiles = new();
             ClaimedTiles = 0;
@@ -33,6 +33,11 @@
         public bool Uncontested { get; private set; } = true;
 
         /// <summary>
+        /// True if it is no longer possible for this component to be won by a player
+        /// </summary>
+        public bool Unwinnable { get; set; } = false;
+
+        /// <summary>
         /// Player who currently has claim over this component. It is claimed
         /// once a player claims one tile, and their claim remains until another
         /// player claims a tile in this component.
@@ -51,7 +56,8 @@
         /// Method to be called once this component has either been won, or has tiles
         /// claimed by two different players, making it unwinnable.
         /// </summary>
-        private Action<BoardComponent> OnComplete { get; set; }
+        private Action<BoardComponent> OnFullyClaimed { get; set; }
+        
 
         /// <summary>
         /// Processes a newly claimed tile
@@ -59,10 +65,6 @@
         /// <param name="claimedTile">Tile that has been claimed</param>
         private void ProcessTileClaim(BoardTile claimedTile)
         {
-            //If this component has already been contested, simply return.
-            if (!Uncontested)
-                return;
-            
             //This is the first tile within the component being claimed:
             if (ClaimedTiles == 0)
             {
@@ -71,7 +73,8 @@
 
                 if (ClaimedTiles == BoardTiles.Count)
                 {
-                    OnComplete(this);
+                    Unwinnable = true;
+                    OnFullyClaimed(this);
                 }
                 
                 return;
@@ -85,7 +88,8 @@
                 //If this component has been entirely claimed by a single player, alert the board.
                 if (ClaimedTiles == BoardTiles.Count)
                 {
-                    OnComplete(this);
+                    Unwinnable = true;
+                    OnFullyClaimed(this);
                 }
 
                 return;
@@ -95,7 +99,11 @@
             ClaimedTiles++;
             ClaimedBy = null;
             Uncontested = false;
-            OnComplete(this);
+            
+            if (ClaimedTiles == BoardTiles.Count)
+            {
+                OnFullyClaimed(this);
+            }
         }
 
         /// <summary>

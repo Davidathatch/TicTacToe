@@ -1,10 +1,18 @@
-﻿@using TicTacToe.Services
+﻿@using TicTacToe.Models
+@using TicTacToe.Services
 @inject GameStateService StateService
 @inject NavigationManager Navigation
 
 <div id="game-over-dialog">
     <h1>Game Over</h1>
-    <h2>@(char.ToUpper(StateService.State!.Winner!.Symbol) + " Won")</h2>
+    @if (Status.GetType() == typeof(GameStatus.Won))
+    {
+        <h2>@(char.ToUpper(((GameStatus.Won)Status).Winner.Symbol) + " Won")</h2>
+    }
+    else
+    {
+        <h2>Tied</h2>
+    }
     
     <div class="dialog-option-buttons">
         <button @onclick="OnHomeClicked">Home</button>
@@ -14,6 +22,8 @@
 
 @code
 {
+    [Parameter] public required GameStatus Status { get; set; }
+
     private void OnPlayAgainClicked()
     {
         StateService.State!.Restart();

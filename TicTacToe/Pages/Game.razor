@@ -1,4 +1,5 @@
 ﻿@using TicTacToe.Components
+@using TicTacToe.Models
 @using TicTacToe.Services
 @inject GameStateService StateService
 @inject JsStylingFunctions JS
@@ -15,9 +16,9 @@
     <BoardGrid RepresentingBoard="StateService.State!.GameBoard"/>
 </div>
 
-@if (StateService.State!.GameStatus > 0)
+@if (StateService.State.Status.GetType() == typeof(GameStatus.Won) || StateService.State.Status.GetType() == typeof(GameStatus.Tied))
 {
-    <GameOverDialog></GameOverDialog>
+    <GameOverDialog Status="StateService.State.Status"></GameOverDialog>
 }
 
 @code {

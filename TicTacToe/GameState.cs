@@ -29,13 +29,8 @@ namespace TicTacToe
 
         /// <summary>
         /// Represents the status of the game.
-        ///
-        /// -1 = pending start
-        /// 0 = ongoing
-        /// 1 = game over with winner
-        /// 2 = game over with tie
         /// </summary>
-        public int GameStatus { get; private set; }
+        public GameStatus Status { get; private set; }
 
         /// <summary>
         /// The board the game is being played on.
@@ -62,7 +57,7 @@ namespace TicTacToe
             GameBoard = new(boardSize);
             GameBoard.OnGameOver += ProcessGameEnd;
             
-            GameStatus = -1;
+            Status = new GameStatus.AwaitingStart();
         }
         
         /// <summary>
@@ -90,13 +85,13 @@ namespace TicTacToe
             //If the winning component property is not null, there was a winner
             if (GameBoard.WinningComponent is not null)
             {
-                GameStatus = 1;
+                Status = new GameStatus.Won(GameBoard.WinningComponent.ClaimedBy!);
                 Winner = GameBoard.WinningComponent.ClaimedBy;
                 return;
             }
 
             //Otherwise, the game ended in a tie.
-            GameStatus = 2;
+            Status = new GameStatus.Tied();
         }
 
         /// <summary>
@@ -112,7 +107,7 @@ namespace TicTacToe
             GameBoard.ResetBoard();
 
             //Set the status
-            GameStatus = 0;
+            Status = new GameStatus.Ongoing();
             OnRestart?.Invoke();
         }
     }

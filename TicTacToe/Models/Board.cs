@@ -33,15 +33,15 @@ namespace TicTacToe.Models
             for (int index = 1; index <= boardSize; index++)
             {
                 //Create and add the row and column at the current index
-                BoardComponent newRow = new($"0{index}", ProcessComponentComplete);
-                BoardComponent newColumn = new($"1{index}", ProcessComponentComplete);
+                BoardComponent newRow = new($"0{index}", ProcessCompletedComponent);
+                BoardComponent newColumn = new($"1{index}", ProcessCompletedComponent);
                 BoardComponents.Add(newRow.BoardIndex, newRow);
                 BoardComponents.Add(newColumn.BoardIndex, newColumn);
             }
             
             //Create and add the two diagonal components
-            BoardComponent ltrComponent = new("2ltr", ProcessComponentComplete);
-            BoardComponent rtlComponent = new("2rtl", ProcessComponentComplete);
+            BoardComponent ltrComponent = new("2ltr", ProcessCompletedComponent);
+            BoardComponent rtlComponent = new("2rtl", ProcessCompletedComponent);
             BoardComponents.Add(ltrComponent.BoardIndex, ltrComponent);
             BoardComponents.Add(rtlComponent.BoardIndex, rtlComponent);
 
@@ -90,7 +90,7 @@ namespace TicTacToe.Models
         /// <summary>
         /// Tracks the number of components that are no longer winnable.
         /// </summary>
-        private int _unwinnableComponents = 0;
+        private int _completedComponents = 0;
 
         /// <summary>
         /// Size of this board. Each component will contain this number of tiles.
@@ -120,12 +120,13 @@ namespace TicTacToe.Models
         public event Action OnGameOver;
 
         /// <summary>
-        /// Takes a completed component and removes it from the dictionary.
+        /// Takes a newly unwinnable component and processed whether it was won, or if it
+        /// has been claimed by multiple players and can no longer be won.
         /// </summary>
-        /// <param name="completedComponent"></param>
-        public void ProcessComponentComplete(BoardComponent completedComponent)
+        /// <param name="completedComponent">Component that has become unwinnable</param>
+        private void ProcessCompletedComponent(BoardComponent completedComponent)
         {
-            _unwinnableComponents++;
+            _completedComponents++;
 
             //If the component has been completed and is still claimed by a player, then that player has won.
             if (completedComponent.Uncontested && completedComponent.ClaimedTiles == completedComponent.BoardTiles.Count)
@@ -136,7 +137,7 @@ namespace TicTacToe.Models
                 OnGameOver?.Invoke();
             }
             //Otherwise, check that there are still components capable of being won. If there aren't any, end the game.
-            else if (_unwinnableComponents == BoardComponents.Count)
+            else if (_completedComponents == BoardComponents.Count)
             {
                 GameOver = true;
                 OnGameOver?.Invoke();
@@ -151,10 +152,9 @@ namespace TicTacToe.Models
             BoardComponents = new();
             BoardTiles = new();
             GameOver = false;
-            GenerateBoard(BoardSize);
-            _unwinnableComponents = 0;
+            _completedComponents = 0;
             WinningComponent = null;
-
+            GenerateBoard(BoardSize);
         }
     }
 }

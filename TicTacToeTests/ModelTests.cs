@@ -157,7 +157,6 @@ namespace TicTacToe.Tests
                     }
                     
                     //Check that the row was completely claimed, and was therefore removed from the board
-                    Assert.IsFalse(newBoard.BoardComponents.ContainsKey($"0{rowIndex}"));
                     Assert.IsTrue(newBoard.GameOver);
                     
                     //Reset for the next row
@@ -182,7 +181,6 @@ namespace TicTacToe.Tests
                     }
                     
                     //Check that the column was completely claimed, and was therefore removed from the board
-                    Assert.IsFalse(newBoard.BoardComponents.ContainsKey($"1{columnIndex}"));
                     Assert.IsTrue(newBoard.GameOver);
                     
                     //Reset for the next column
@@ -204,7 +202,6 @@ namespace TicTacToe.Tests
                 }
                 
                 //Check that the diagonal was completely claimed, and was therefore removed from the board
-                Assert.IsFalse(newBoard.BoardComponents.ContainsKey("2ltr"));
                 Assert.IsTrue(newBoard.GameOver);
                 
                 //Reset for the next diagonal
@@ -222,11 +219,78 @@ namespace TicTacToe.Tests
                 }
                 
                 //Check that the diagonal was completely claimed, and was therefore removed from the board
-                Assert.IsFalse(newBoard.BoardComponents.ContainsKey("2rtl"));
                 Assert.IsTrue(newBoard.GameOver);
                 
                 //Reset for the next diagonal
                 newBoard.GameOver = false;
+            }
+        }
+
+        [TestMethod]
+        [DataRow(1, 2, 3, 4, 5, 6, 7, 8, 9)]
+        public void CheckComponentCompletionUncontested(params int[] sizes)
+        {
+            foreach (int siz in sizes)
+            {
+                var testBoard = new Board(siz);
+                var testPlayerOne = new Player('x');
+                var testPlayerTwo = new Player('o');
+
+                //Test that rows are only marked as claimed when each tile is claimed by a single player
+                for (int rowIndex = 1; rowIndex <= siz; rowIndex++)
+                {
+                    var currentRow = testBoard.BoardComponents[$"0{rowIndex}"];
+
+                    //Claim each tile in this component, verifying that the component isn't claimed until each tile is claimed
+                    foreach (BoardTile boardTile in currentRow.BoardTiles)
+                    {
+                        Assert.IsFalse(currentRow.Unwinnable);
+                        boardTile.ClaimTile(testPlayerOne);
+                    }
+
+                    //Verify that the component is claimed, now that each tile has been claimed
+                    Assert.IsTrue(currentRow.Unwinnable);
+                }
+
+                //Reset the board and test the columns
+                testBoard = new Board(siz);
+
+                for (int columnIndex = 1; columnIndex <= siz; columnIndex++)
+                {
+                    var currentColumn = testBoard.BoardComponents[$"1{columnIndex}"];
+
+                    foreach (BoardTile boardTile in currentColumn.BoardTiles)
+                    {
+                        Assert.IsFalse(currentColumn.Unwinnable);
+                        boardTile.ClaimTile(testPlayerOne);
+                    }
+
+                    Assert.IsTrue(currentColumn.Unwinnable);
+                }
+
+                //Reset the board and test the left to right diagonal
+                testBoard = new Board(siz);
+                var LTR = testBoard.BoardComponents["2ltr"];
+
+                foreach (BoardTile boardTile in LTR.BoardTiles)
+                {
+                    Assert.IsFalse(LTR.Unwinnable);
+                    boardTile.ClaimTile(testPlayerOne);
+                }
+
+                Assert.IsTrue(LTR.Unwinnable);
+
+                //Reset the board and test the right to left diagonal
+                testBoard = new Board(siz);
+                var RTL = testBoard.BoardComponents["2rtl"];
+
+                foreach (BoardTile boardTile in RTL.BoardTiles)
+                {
+                    Assert.IsFalse(RTL.Unwinnable);
+                    boardTile.ClaimTile(testPlayerOne);
+                }
+
+                Assert.IsTrue(RTL.Unwinnable);
             }
         }
     }

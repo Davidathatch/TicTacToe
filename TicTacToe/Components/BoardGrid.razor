@@ -14,4 +14,19 @@
 </div>
 @code {
     [Parameter] public required Board RepresentingBoard { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        
+        //Loop through each tile in each column and print its position to ensure they are being
+        //rendered in the correct order
+        for (int i = 1; i <= RepresentingBoard.BoardSize; i++)
+        {
+            foreach (BoardTile tile in RepresentingBoard.BoardComponents[$"0{i}"].BoardTiles)
+            {
+                Debug.WriteLine($"Tile at position {tile.TilePosition.X}, {tile.TilePosition.Y}");
+            }
+        }
+    }
 }

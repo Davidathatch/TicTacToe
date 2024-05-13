@@ -50,6 +50,9 @@
 
     private void OnTileClicked()
     {
+        if (RepresentingBoardTile.Claimed)
+            return;
+
         var claimingPlayer = StateService.State!.RegisterTurn();
         RepresentingBoardTile.ClaimTile(claimingPlayer);
         _svgUpdated = true;
