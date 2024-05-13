@@ -30,7 +30,7 @@ namespace TicTacToe
         /// <summary>
         /// Represents the status of the game.
         /// </summary>
-        public GameStatus Status { get; private set; }
+        public GameStatus Status { get; set; }
 
         /// <summary>
         /// The board the game is being played on.

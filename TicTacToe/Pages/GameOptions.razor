@@ -73,6 +73,7 @@
     private void OnPreferencesSubmitted()
     {
         StateService.State = new(new Player(_playerOneSymbol), new Player(_playerTwoSymbol), 3);
+        StateService.State.Status = new GameStatus.Ongoing();
         Navigation.NavigateTo("/play");
     }
 }

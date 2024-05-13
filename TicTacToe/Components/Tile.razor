@@ -55,7 +55,7 @@
 
     private void OnTileClicked()
     {
-        if (RepresentingBoardTile.Claimed)
+        if (RepresentingBoardTile.Claimed || StateService.State!.Status.GetType() != typeof(GameStatus.Ongoing))
             return;
 
         var claimingPlayer = StateService.State!.RegisterTurn();

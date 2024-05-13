@@ -103,6 +103,57 @@ window.resetTile = (svgId) => {
     });
 }
 
+window.onGameStarted = () => {
+    var backgroundImages = document.getElementsByClassName("bg-image");
+    var currentDuration = 3000;
+    var currentYTranslation = 20;
+    var currentXTranslation = 10;
+
+    for (let i = 0; i < backgroundImages.length; i++) {
+        anime({
+            targets: backgroundImages[i],
+            translateY: currentYTranslation,
+            translateX: currentXTranslation,
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutSine',
+            duration: currentDuration
+        });
+
+        currentDuration += 500;
+        var temp = currentXTranslation;
+        currentXTranslation = currentYTranslation;
+        currentYTranslation = temp; 
+    }
+}
+
+window.toggleGameOverDialog = (entrance) => {
+    var gameOverDialog = document.getElementById('game-over-dialog');
+
+    if (entrance) {
+        gameOverDialog.style.right = 'auto';
+        anime({
+            targets: '#game-over-dialog',
+            targets: '#game-over-dialog',
+            left: '50%',
+            duration: 3000,
+            easing: 'easeInOutElastic(1, .6)'
+        });
+    }
+    else {
+        gameOverDialog.style.left = 'auto';
+        anime({
+            targets: '#game-over-dialog',
+            right: '-100%',
+            duration: 3000,
+            easing: 'easeOutInElastic(1, .6)',
+            complete: function(anim) {
+                document.getElementById('game-over-dialog').style.left = '-100%';
+            }
+        });
+    }
+}
+
 // PRIVATE FUNCTIONS
 
 /**

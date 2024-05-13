@@ -7,7 +7,7 @@
 
 @page "/play"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Play</PageTitle>
 
 <div id="home-page">
     <img id="bg-image-tl" class="bg-image" src="Assets/Squiggle.svg" alt="Decorative squiggle"/>
@@ -17,12 +17,11 @@
     <BoardGrid RepresentingBoard="StateService.State!.GameBoard"/>
 </div>
 
-@if (StateService.State.Status.GetType() == typeof(GameStatus.Won) || StateService.State.Status.GetType() == typeof(GameStatus.Tied))
-{
     <GameOverDialog Status="StateService.State.Status"></GameOverDialog>
-}
 
 @code {
+    private bool _stateChanged = false;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -33,5 +32,31 @@
     private void OnGameStatusChange()
     {
         InvokeAsync(StateHasChanged);
+        _stateChanged = true;
     }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            JS.OnGameStarted();
+        }
+
+        if (_stateChanged)
+        {
+            //If the game is ongoing, remove the dialog
+            if (StateService.State!.Status.GetType() == typeof(GameStatus.Ongoing))
+            {
+                JS.OnGameOver(false); 
+            }
+            else
+            {
+                JS.OnGameOver(true);
+            }
+            _stateChanged = false;
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
 }

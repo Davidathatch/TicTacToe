@@ -62,4 +62,18 @@ public class JsInteropFunctions(IJSRuntime jS)
     {
         await jS.InvokeVoidAsync("resetTile", svgId);
     }
+
+    /// <summary>
+    /// Calls the onGameStarted function within the js runtime. This function
+    /// initiates idle, decorative animations.
+    /// </summary>
+    public async void OnGameStarted()
+    {
+        await jS.InvokeVoidAsync("onGameStarted");
+    }
+
+    public async void OnGameOver(bool entrance)
+    {
+        await jS.InvokeVoidAsync("toggleGameOverDialog", entrance);
+    }
 }
