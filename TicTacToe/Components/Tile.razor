@@ -3,20 +3,24 @@
 @using TicTacToe.Models
 @using TicTacToe.Models.ConstantModels
 @using TicTacToe.Services
-@inject JsStylingFunctions JS
+@inject JsInteropFunctions JS
 @inject GameConstants GameConstants
 @inject GameStateService StateService
 
-<div class="tile-container" style="grid-row: @RepresentingBoardTile.TilePosition.X; grid-column: @RepresentingBoardTile.TilePosition.Y;" id="@_tileElementId" @onclick="OnTileClicked">
-    
-    @if (!RepresentingBoardTile.Claimed)
-    {
-        <object data="@(GameConstants.SvgPaths.BlankTile)" type="image/svg+xml" class="board-tile" id="@_tileSvgId" style="pointer-events: none"></object>
-    }
-    else
-    {
-        <object data="@(GameConstants.SvgPaths.GetPathFor(RepresentingBoardTile.ClaimedBy!))" type="image/svg+xml" class="board-tile" id="@_tileSvgId" style="pointer-events: none"></object>
-    }
+<div class="tile-container" style="grid-row: @RepresentingBoardTile.TilePosition.X; grid-column: @RepresentingBoardTile.TilePosition.Y;" @onclick="OnTileClicked">
+
+    <div class="tile-body" id="@_tileElementId">
+        <object data="@(GameConstants.SvgPaths.BlankTile)" type="image/svg+xml" class="board-tile tile-front" id="@(_tileSvgId)-front" style="pointer-events: none"></object>
+
+        @if (RepresentingBoardTile.Claimed)
+        {
+            <object data="@(GameConstants.SvgPaths.GetTilePathFor(RepresentingBoardTile.ClaimedBy!))" type="image/svg+xml" class="board-tile tile-back" id="@(_tileSvgId)-back" style="pointer-events: none"></object>
+        }
+        else
+        {
+            <object data="@(GameConstants.SvgPaths.BlankTile)" type="image/svg+xml" class="board-tile tile-back" id="@(_tileSvgId)-back" style="pointer-events: none"></object>
+        }
+    </div>
 </div>
 
 @code {
@@ -26,7 +30,7 @@
 
     //True if the svg has been updated but not yet rendered
     private bool _svgUpdated = false;
-    
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -43,24 +47,31 @@
          */
         if (firstRender || _svgUpdated)
         {
-            await JS.RegisterSvgTile(_tileSvgId);
+            await JS.RegisterSvgTile($"{_tileSvgId}-front");
+            await JS.RegisterSvgTile($"{_tileSvgId}-back");
             _svgUpdated = false;
         }
     }
 
     private void OnTileClicked()
     {
-        if (RepresentingBoardTile.Claimed)
+        if (RepresentingBoardTile.Claimed || StateService.State!.Status.GetType() != typeof(GameStatus.Ongoing))
             return;
 
         var claimingPlayer = StateService.State!.RegisterTurn();
         RepresentingBoardTile.ClaimTile(claimingPlayer);
         _svgUpdated = true;
+
+        JS.InvokeTileFlipAnimation(_tileElementId);
     }
 
     private void OnGameRestart()
     {
-        // JS.ApplyGradientToLoaded(_tileSvgId);
+        if (RepresentingBoardTile.Claimed)
+        {
+            JS.ResetTile(_tileElementId);
+        }
         _svgUpdated = true;
     }
+
 }

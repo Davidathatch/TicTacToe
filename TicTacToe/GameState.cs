@@ -1,4 +1,5 @@
 ﻿using TicTacToe.Models;
+using TicTacToe.Models.ConstantModels;
 
 namespace TicTacToe
 {
@@ -30,12 +31,17 @@ namespace TicTacToe
         /// <summary>
         /// Represents the status of the game.
         /// </summary>
-        public GameStatus Status { get; private set; }
+        public GameStatus Status { get; set; }
 
         /// <summary>
         /// The board the game is being played on.
         /// </summary>
         public Board GameBoard { get; set; }
+
+        /// <summary>
+        /// String value dictating the selected color theme of the game.
+        /// </summary>
+        public string GameTheme { get; set; } = GameConstants.ThemeValues.Default;
 
         /// <summary>
         /// Invoked when this state is restarted.

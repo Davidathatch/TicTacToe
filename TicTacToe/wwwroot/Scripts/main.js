@@ -73,6 +73,95 @@ window.applyGradientToLoaded = (svgId) => {
     svgDoc.getElementById("gradient-end-color").setAttribute('style', `stop-color:white`);
 }
 
+/**
+ * Applies a card turning animation to the svg object with the given id.
+ * @param {any} svgId Id of the svg object
+ */
+window.invokeTileFlipAnimation = (svgId) => {
+    var tile = document.getElementById(svgId);
+
+    anime({
+        targets: tile,
+        scale: [{ value: 1 }, { value: 1.4 }, { value: 1, delay: 250 }],
+        rotateY: { value: "+=180", delay: 200 },
+        easing: "easeInOutSine",
+        duration: 400
+    });
+}
+
+/**
+ * Resets a claimed tile in preparation for a new round.
+ * @param {any} svgId Id of the tile being reset
+ */
+window.resetTile = (svgId) => {
+    var tile = document.getElementById(svgId);
+
+    anime({
+        targets: tile,
+        rotateY: { value: "-=180" },
+        duration: 0
+    });
+}
+
+/**
+ * Called when the game has started and the page has been rendered.
+ * This function adds a subtle looping animation to the background svgs.
+ */
+window.onGameStarted = () => {
+    var backgroundImages = document.getElementsByClassName("bg-image");
+    var currentDuration = 3000;
+    var currentYTranslation = 20;
+    var currentXTranslation = 10;
+
+    for (let i = 0; i < backgroundImages.length; i++) {
+        anime({
+            targets: backgroundImages[i],
+            translateY: currentYTranslation,
+            translateX: currentXTranslation,
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutSine',
+            duration: currentDuration
+        });
+
+        currentDuration += 500;
+        var temp = currentXTranslation;
+        currentXTranslation = currentYTranslation;
+        currentYTranslation = temp; 
+    }
+}
+
+/**
+ * Animates an entrance or exit for the game over dialog.
+ * @param {any} entrance True if the dialog is being shown, false if it is being hidden.
+ */
+window.toggleGameOverDialog = (entrance) => {
+    var gameOverDialog = document.getElementById('game-over-dialog');
+
+    if (entrance) {
+        gameOverDialog.style.right = 'auto';
+        anime({
+            targets: '#game-over-dialog',
+            targets: '#game-over-dialog',
+            left: '50%',
+            duration: 3000,
+            easing: 'easeInOutElastic(1, .6)'
+        });
+    }
+    else {
+        gameOverDialog.style.left = 'auto';
+        anime({
+            targets: '#game-over-dialog',
+            right: '-100%',
+            duration: 3000,
+            easing: 'easeOutInElastic(1, .6)',
+            complete: function(anim) {
+                document.getElementById('game-over-dialog').style.left = '-100%';
+            }
+        });
+    }
+}
+
 
 // PRIVATE FUNCTIONS
 
