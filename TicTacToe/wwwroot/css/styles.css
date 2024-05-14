@@ -212,28 +212,28 @@ main {
 #bg-image-tl {
     top: 5%;
     left: 10%;
-    width: 45vmin;
+    width: 30vmin;
     height: auto;
 }
 
 #bg-image-tr {
     top: 5%;
     right: 10%;
-    width: 45vmin;
+    width: 30vmin;
     height: auto;
 }
 
 #bg-image-bl {
     bottom: 5%;
     left: 8%;
-    width: 40vmin;
+    width: 30vmin;
     height: auto;
 }
 
 #bg-image-br {
     bottom: 5%;
     right: 10%;
-    width: 50vmin;
+    width: 35vmin;
     height: auto;
     transform: rotate(-30deg);
 }

@@ -15,6 +15,9 @@ public class GameConstants
         public static string PinkTheme = "pink";
         public static string BlueTheme = "blue";
         public static string OrangeTheme = "orange";
+
+        //The default theme will be applied initially
+        public static string Default = "orange";
     }
 
     /// <summary>
@@ -30,9 +33,49 @@ public class GameConstants
         /// </summary>
         /// <param name="claimingPlayer">Player who will be represented by the returned tile</param>
         /// <returns>File path to appropriate svg</returns>
-        public static string GetPathFor(Player claimingPlayer)
+        public static string GetTilePathFor(Player claimingPlayer)
         {
             return $"Assets/svgs/claimed-square-{char.ToLower(claimingPlayer.Symbol)}.svg";
+        }
+
+        /// <summary>
+        /// Given the value of a theme, return a list of the decorative svgs designed
+        /// for that theme.
+        /// </summary>
+        /// <param name="themeValue">Value of the theme being applied</param>
+        /// <returns>A list of file paths to local svgs</returns>
+        public static List<string> GetDecorativeSvgPaths(string themeValue)
+        {
+            switch (themeValue)
+            {
+                case "pink":
+                    return
+                    [
+                        "Assets/decorative/pink-theme-decorative-squiggle.svg",
+                        "Assets/decorative/pink-theme-decorative-donut.svg"
+                    ];
+                    break;
+
+                case "blue":
+                    return
+                    [
+                        "Assets/decorative/blue-theme-decorative-circle.svg",
+                        "Assets/decorative/blue-theme-decorative-square.svg"
+                    ];
+                    break;
+
+                case "orange":
+                    return
+                    [
+                        "Assets/decorative/orange-theme-decorative-circle.svg",
+                        "Assets/decorative/orange-theme-decorative-star.svg"
+                    ];
+                    break;
+
+                default:
+                    return new List<string>();
+                    break;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@using System.Diagnostics
 @using TicTacToe.Components
 @using TicTacToe.Models
+@using TicTacToe.Models.ConstantModels
 @using TicTacToe.Services
 @inject GameStateService StateService
 @inject JsInteropFunctions JS
@@ -10,10 +11,10 @@
 <PageTitle>Play</PageTitle>
 
 <div id="home-page">
-    <img id="bg-image-tl" class="bg-image" src="Assets/Squiggle.svg" alt="Decorative squiggle"/>
-    <img id="bg-image-tr" class="bg-image" src="Assets/Donut.svg" alt="Decorative circle with hole in center"/>
-    <img id="bg-image-bl" class="bg-image" src="Assets/Donut.svg" alt="Decorative circle with hole in center"/>
-    <img id="bg-image-br" class="bg-image" src="Assets/Squiggle.svg" alt="Decorative squiggle"/>
+    <img id="bg-image-tl" class="bg-image" src="@_decorationPaths[0]" alt="Decorative squiggle"/>
+    <img id="bg-image-tr" class="bg-image" src="@_decorationPaths[1]" alt="Decorative circle with hole in center"/>
+    <img id="bg-image-bl" class="bg-image" src="@_decorationPaths[1]" alt="Decorative circle with hole in center"/>
+    <img id="bg-image-br" class="bg-image" src="@_decorationPaths[0]" alt="Decorative squiggle"/>
     <BoardGrid RepresentingBoard="StateService.State!.GameBoard"/>
 </div>
 
@@ -21,12 +22,14 @@
 
 @code {
     private bool _stateChanged = false;
+    private List<string> _decorationPaths;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         StateService.State!.GameBoard.OnGameOver += OnGameStatusChange;
         StateService.State!.OnRestart += OnGameStatusChange;
+        _decorationPaths = GameConstants.SvgPaths.GetDecorativeSvgPaths(StateService.State!.GameTheme);
     }
 
     private void OnGameStatusChange()
@@ -37,6 +40,7 @@
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
+        //If this is the first render, alert the JS runtime
         if (firstRender)
         {
             JS.OnGameStarted();
@@ -44,11 +48,12 @@
 
         if (_stateChanged)
         {
-            //If the game is ongoing, remove the dialog
+            //If the game is ongoing, hide the dialog
             if (StateService.State!.Status.GetType() == typeof(GameStatus.Ongoing))
             {
                 JS.OnGameOver(false); 
             }
+            //Otherwise, animate in the dialog.
             else
             {
                 JS.OnGameOver(true);

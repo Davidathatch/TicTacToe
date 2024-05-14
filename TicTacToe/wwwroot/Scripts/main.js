@@ -103,6 +103,10 @@ window.resetTile = (svgId) => {
     });
 }
 
+/**
+ * Called when the game has started and the page has been rendered.
+ * This function adds a subtle looping animation to the background svgs.
+ */
 window.onGameStarted = () => {
     var backgroundImages = document.getElementsByClassName("bg-image");
     var currentDuration = 3000;
@@ -127,6 +131,10 @@ window.onGameStarted = () => {
     }
 }
 
+/**
+ * Animates an entrance or exit for the game over dialog.
+ * @param {any} entrance True if the dialog is being shown, false if it is being hidden.
+ */
 window.toggleGameOverDialog = (entrance) => {
     var gameOverDialog = document.getElementById('game-over-dialog');
 
@@ -153,6 +161,7 @@ window.toggleGameOverDialog = (entrance) => {
         });
     }
 }
+
 
 // PRIVATE FUNCTIONS
 

@@ -51,9 +51,22 @@
 @code {
     private char _playerOneSymbol = 'x';
     private char _playerTwoSymbol = 'o';
-    
+    private string _selectedTheme = GameConstants.ThemeValues.Default;
+
+    protected override async void OnInitialized()
+    {
+        await base.OnInitializedAsync();
+
+        //Set default theme if the state has not been created yet
+        if (StateService.State is null)
+        {
+            await JS.SetTheme(GameConstants.ThemeValues.Default);
+        }
+    }
+
     private async void ThemeSelected(string themeValue)
     {
+        _selectedTheme = themeValue;
         await JS.SetTheme(themeValue);
     }
     
@@ -72,7 +85,7 @@
 
     private void OnPreferencesSubmitted()
     {
-        StateService.State = new(new Player(_playerOneSymbol), new Player(_playerTwoSymbol), 3);
+        StateService.State = new(new Player(_playerOneSymbol), new Player(_playerTwoSymbol), 3){GameTheme = _selectedTheme};
         StateService.State.Status = new GameStatus.Ongoing();
         Navigation.NavigateTo("/play");
     }

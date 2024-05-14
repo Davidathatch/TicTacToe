@@ -14,7 +14,7 @@
 
         @if (RepresentingBoardTile.Claimed)
         {
-            <object data="@(GameConstants.SvgPaths.GetPathFor(RepresentingBoardTile.ClaimedBy!))" type="image/svg+xml" class="board-tile tile-back" id="@(_tileSvgId)-back" style="pointer-events: none"></object>
+            <object data="@(GameConstants.SvgPaths.GetTilePathFor(RepresentingBoardTile.ClaimedBy!))" type="image/svg+xml" class="board-tile tile-back" id="@(_tileSvgId)-back" style="pointer-events: none"></object>
         }
         else
         {

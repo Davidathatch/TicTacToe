@@ -1,0 +1,92 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="wwwroot\Scripts\anime-master\**" />
+	  <Content Remove="wwwroot\Scripts\anime-master\**" />
+	  <EmbeddedResource Remove="wwwroot\Scripts\anime-master\**" />
+	  <None Remove="wwwroot\Scripts\anime-master\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\Scripts\anime\.github\FUNDING.yml" />
+	  <None Include="wwwroot\Scripts\anime\.github\ISSUE_TEMPLATE\bug_report.md" />
+	  <None Include="wwwroot\Scripts\anime\.github\ISSUE_TEMPLATE\feature_request.md" />
+	  <None Include="wwwroot\Scripts\anime\.gitignore" />
+	  <None Include="wwwroot\Scripts\anime\build.js" />
+	  <None Include="wwwroot\Scripts\anime\CNAME" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\fonts\InputMono-Bold.woff2" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\fonts\InputMono-BoldItalic.woff2" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\fonts\InputMono-Italic.woff2" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\fonts\InputMono-Regular.woff2" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\fonts\Roobert-Regular.woff2" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\fonts\Roobert-SemiBold.woff2" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\fonts\Roobert-SemiBoldItalic.woff2" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\anime-mini-logo.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-codepen.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-css.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-docs.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-documentation.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-download.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-easing-cubic.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-easing-elastic.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-easing-spring.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-easing-steps.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-examples.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-github.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-html.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-js.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-staggering-center.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-staggering-easing.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-staggering-forward.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-staggering-grid.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-staggering-index.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-staggering-reverse.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-svg.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\img\icons\icon-twitter.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime.player.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime\anime.1.0.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime\anime.1.3.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime\anime.2.0.0.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime\anime.2.0.1.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime\anime.2.0.2.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime\anime.2.1.0.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime\anime.2.2.0.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\anime\anime.3.0.0-alpha.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\documentation.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\v4.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\vendors\beautify-html.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\vendors\highlight.pack.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\vendors\stats.min.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\js\website.js" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\sponsors\huly-logomark-dark.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\sponsors\huly-logomark.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\sponsors\placeholder-dark.svg" />
+	  <None Include="wwwroot\Scripts\anime\documentation\assets\sponsors\placeholder.svg" />
+	  <None Include="wwwroot\Scripts\anime\lib\anime.es.js" />
+	  <None Include="wwwroot\Scripts\anime\lib\anime.js" />
+	  <None Include="wwwroot\Scripts\anime\lib\anime.min.js" />
+	  <None Include="wwwroot\Scripts\anime\LICENSE.md" />
+	  <None Include="wwwroot\Scripts\anime\README.md" />
+	  <None Include="wwwroot\Scripts\anime\src\index.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeCoverage" Version="17.9.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+		<PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
+		<PackageReference Include="MSTest.TestFramework" Version="3.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\Assets\NewFolder\" />
+	</ItemGroup>
+
+</Project>
