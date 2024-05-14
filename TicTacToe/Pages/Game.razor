@@ -11,33 +11,55 @@
 <PageTitle>Play</PageTitle>
 
 <div id="home-page">
-    <img id="bg-image-tl" class="bg-image" src="@_decorationPaths[0]" alt="Decorative squiggle"/>
+    @* Decorative background images *@
+    <img id="bg-image-tl" class="bg-image" src="@_decorationPaths![0]" alt="Decorative squiggle"/>
     <img id="bg-image-tr" class="bg-image" src="@_decorationPaths[1]" alt="Decorative circle with hole in center"/>
     <img id="bg-image-bl" class="bg-image" src="@_decorationPaths[1]" alt="Decorative circle with hole in center"/>
     <img id="bg-image-br" class="bg-image" src="@_decorationPaths[0]" alt="Decorative squiggle"/>
+
+    @* Game board and tiles *@
     <BoardGrid RepresentingBoard="StateService.State!.GameBoard"/>
 </div>
 
-    <GameOverDialog Status="StateService.State.Status"></GameOverDialog>
+@* Game over dialog (initially positioned outside of view) *@
+<GameOverDialog Status="StateService.State.Status"></GameOverDialog>
 
 @code {
-    private bool _stateChanged = false;
-    private List<string> _decorationPaths;
+    //True if un-rendered changes have been made. Used to determine when to animate in the game over dialog.
+    private bool _stateChanged;
 
+    //List of file paths for the decorative background images
+    private List<string>? _decorationPaths;
+
+    /// <summary>
+    /// Called once this page has been initialized.
+    /// </summary>
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
+        //Register for important game events
         StateService.State!.GameBoard.OnGameOver += OnGameStatusChange;
         StateService.State!.OnRestart += OnGameStatusChange;
+
+        //Get the file paths for the decorative background images
         _decorationPaths = GameConstants.SvgPaths.GetDecorativeSvgPaths(StateService.State!.GameTheme);
     }
 
+    /// <summary>
+    /// When the game status changes, re-render and mark that the state has changed. 
+    /// </summary>
     private void OnGameStatusChange()
     {
         InvokeAsync(StateHasChanged);
         _stateChanged = true;
     }
 
+    /// <summary>
+    /// Called after the page has been rendered.
+    /// </summary>
+    /// <param name="firstRender">True if this is the page's first time being rendered.</param>
+    /// <returns>Task</returns>
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         //If this is the first render, alert the JS runtime
@@ -46,18 +68,21 @@
             JS.OnGameStarted();
         }
 
+        //If there were changes made before this render, make relevant method calls
         if (_stateChanged)
         {
-            //If the game is ongoing, hide the dialog
+            //If the game status has changed to ongoing, animate the game over dialog out of view
             if (StateService.State!.Status.GetType() == typeof(GameStatus.Ongoing))
             {
-                JS.OnGameOver(false); 
+                JS.ToggleGameOverDialog(false);
             }
-            //Otherwise, animate in the dialog.
+            //Otherwise, animate the game over dialog into view
             else
             {
-                JS.OnGameOver(true);
+                JS.ToggleGameOverDialog(true);
             }
+
+            //Mark that changes have been addressed
             _stateChanged = false;
         }
 

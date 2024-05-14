@@ -34,7 +34,7 @@
         </div>
 
         <div id="submit-section">
-            <div class="submit-button primary-gradient-box theme-crossfade" @onclick="OnPreferencesSubmitted">Submit</div>
+            <div class="submit-button primary-gradient-box theme-crossfade" @onclick="OnPreferencesSubmitted">Play</div>
         </div>
     </div>
 
@@ -49,27 +49,53 @@
 </main>
 
 @code {
+    //Symbol to represent player one
     private char _playerOneSymbol = 'x';
+
+    //Symbol to represent player two
     private char _playerTwoSymbol = 'o';
+
+    //Currently selected theme, set to default initially
     private string _selectedTheme = GameConstants.ThemeValues.Default;
 
+    /// <summary>
+    /// Called once this page has been initialized.
+    /// </summary>
     protected override async void OnInitialized()
     {
         await base.OnInitializedAsync();
 
-        //Set default theme if the state has not been created yet
+        /*
+        * If the state has not been created yet, the app has just started up and no games have been played yet.
+        * In this case, manually set the theme to the default, as you cannot yet reference the GameTheme property
+        * contained within the state object.
+        */
         if (StateService.State is null)
         {
             await JS.SetTheme(GameConstants.ThemeValues.Default);
         }
     }
 
+    /// <summary>
+    /// Called when a game theme option element is clicked. Updates the current theme
+    /// and alerts the JS runtime to update the page's styles.
+    /// </summary>
+    /// <param name="themeValue">Value of the selected theme</param>
     private async void ThemeSelected(string themeValue)
     {
         _selectedTheme = themeValue;
         await JS.SetTheme(themeValue);
     }
-    
+
+    /// <summary>
+    /// Called when a player symbol option element is clicked, updating the symbol
+    /// representing either player.
+    ///
+    /// Each player's symbol must be unique, and this method enforces that.
+    /// </summary>
+    /// <param name="changingPlayer">Player whose symbol has been selected</param>
+    /// <param name="otherPlayer">Other player whose symbol will need to change</param>
+    /// <param name="changeTo">Symbol to represent changingPlayer</param>
     private void UpdatePlayerSymbol(ref char changingPlayer, ref char otherPlayer, char changeTo)
     {
         //If attempting to change to the same value, do nothing
@@ -78,15 +104,20 @@
             return;
         }
 
-        //Otherwise, update the player's symbols
+        //Otherwise, swap the player's symbols
         otherPlayer = changingPlayer;
         changingPlayer = changeTo;
     }
 
+    /// <summary>
+    /// Called when the play button is clicked, creating a new game state and re-routing to the game page.
+    /// </summary>
     private void OnPreferencesSubmitted()
     {
-        StateService.State = new(new Player(_playerOneSymbol), new Player(_playerTwoSymbol), 3){GameTheme = _selectedTheme};
-        StateService.State.Status = new GameStatus.Ongoing();
+        //Create a new state with the necessary parameters and selected theme
+        StateService.State = new(new Player(_playerOneSymbol), new Player(_playerTwoSymbol), 3){GameTheme = _selectedTheme, Status = new GameStatus.Ongoing()};
+        
+        //Navigate to the game page
         Navigation.NavigateTo("/play");
     }
 }

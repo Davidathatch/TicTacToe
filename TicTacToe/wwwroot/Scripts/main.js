@@ -1,4 +1,5 @@
-﻿const blueThemeColors = {
+﻿//Dictionaries containing each themes colors as hex codes.
+const blueThemeColors = {
     "primary": "#B3C8CF",
     "primaryLight": "#D6E8EE",
     "secondary": "#99BC85",
@@ -19,43 +20,44 @@ const orangeThemeColors = {
     "secondaryLight": "#F3D0D7"
 }
 
+//Contains each available theme
 const themes = {
     "blue": blueThemeColors,
     "pink": pinkThemeColors,
     "orange": orangeThemeColors
 };
 
-//Current theme, pink by default. Index zero represents the theme's name
+//Current theme, pink by default. Index zero represents the theme's key value, index 1 is the theme itself.
 var currentTheme = ['pink', pinkThemeColors];
 
 // .NET INVOKABLE FUNCTIONS
 
 /**
  * Sets the value of currentTheme.
- * 
- * Each theme is stored in the themes dictionary:
- * Key = name of theme's color (ex: pink theme's key is 'pink')
- * @param theme Key for desired key
+ *
+ * Each theme is stored in the themes' dictionary. Keys correlating to
+ * each theme can be accessed in .NET from the GameConstants class.
+ * @param themeValue Key for desired theme
  */
-window.setTheme = (theme) => {
-    if (!themes.hasOwnProperty(theme))
+window.setTheme = (themeValue) => {
+    if (!themes.hasOwnProperty(themeValue))
         return false;
-    
+
     //Remove the current theme from the body
     let body = document.getElementsByTagName('body')[0];
     body.classList.remove(getThemeClassName(currentTheme[0]));
-    
+
     //Update currentTheme
-    currentTheme = [theme, themes[theme]];
+    currentTheme = [themeValue, themes[themeValue]];
     body.classList.add(getThemeClassName(currentTheme[0]))
-    
+
     return true;
 }
 
 /**
- * Retrieves the svg object with the given id and sets it to call a method
- * once fully loaded. The method being called will apply the appropriate
- * gradient fill.
+ * Retrieves the svg object with the given id and adds a 'load' event listener.
+ * Once the svg has been loaded, it will call applyGradientToLoaded to have
+ * a gradient fill added to itself. The gradient fill will match the current theme.
  * @param svgId id of the svg object
  */
 window.registerSvg = (svgId) => {
@@ -74,28 +76,38 @@ window.applyGradientToLoaded = (svgId) => {
 }
 
 /**
- * Applies a card turning animation to the svg object with the given id.
- * @param {any} svgId Id of the svg object
+ * Applies a card flipping animation to the tile with the given ID, along
+ * with a sound effect.
+ * @param {any} svgId ID of the tile
  */
-window.invokeTileFlipAnimation = (svgId) => {
+window.invokeTileFlip = (svgId) => {
+    //Get the tile being animated
     var tile = document.getElementById(svgId);
 
+    //Perform tile flipping animation
     anime({
         targets: tile,
         scale: [{ value: 1 }, { value: 1.4 }, { value: 1, delay: 250 }],
         rotateY: { value: "+=180", delay: 200 },
         easing: "easeInOutSine",
-        duration: 400
+        duration: 400,
+        begin: function(anim) {
+            let soundEffect = new Audio("Assets/audio/card-flip-audio.mp4");
+            soundEffect.play();
+        }
     });
 }
 
 /**
- * Resets a claimed tile in preparation for a new round.
- * @param {any} svgId Id of the tile being reset
+ * Resets changes made to a claimed tile by the tile flipping animation.
+ * This is done in preparation for a new round.
+ * @param {any} svgId ID of the tile being reset
  */
 window.resetTile = (svgId) => {
+    //Get the tile being reset
     var tile = document.getElementById(svgId);
 
+    //Reset the y-axis rotation
     anime({
         targets: tile,
         rotateY: { value: "-=180" },
@@ -127,17 +139,18 @@ window.onGameStarted = () => {
         currentDuration += 500;
         var temp = currentXTranslation;
         currentXTranslation = currentYTranslation;
-        currentYTranslation = temp; 
+        currentYTranslation = temp;
     }
 }
 
 /**
- * Animates an entrance or exit for the game over dialog.
- * @param {any} entrance True if the dialog is being shown, false if it is being hidden.
+ * Animates the game over dialog in or out of view.
+ * @param {any} entrance True if dialog is being animated into view, false if being animated out of view.
  */
 window.toggleGameOverDialog = (entrance) => {
     var gameOverDialog = document.getElementById('game-over-dialog');
 
+    //If the dialog is being animated into view
     if (entrance) {
         gameOverDialog.style.right = 'auto';
         anime({
@@ -148,13 +161,14 @@ window.toggleGameOverDialog = (entrance) => {
             easing: 'easeInOutElastic(1, .6)'
         });
     }
+    //If the dialog is being animated out of view.
     else {
         gameOverDialog.style.left = 'auto';
         anime({
             targets: '#game-over-dialog',
             right: '-100%',
             duration: 3000,
-            easing: 'easeOutInElastic(1, .6)',
+            easing: 'spring(1, 80, 10, 0)',
             complete: function(anim) {
                 document.getElementById('game-over-dialog').style.left = '-100%';
             }
@@ -175,7 +189,7 @@ function getThemeClassName(themeName) {
 }
 
 /**
- * This event is called once a svg object is loaded. It will apply the 
+ * This event is called once a svg object is loaded. It will apply the
  * correct gradient fill.
  * @param e Event the invoked this function
  */

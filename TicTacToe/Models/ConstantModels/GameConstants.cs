@@ -9,6 +9,10 @@ public class GameConstants
 {
     /// <summary>
     /// Values used to set the app's theme.
+    ///
+    /// Each app theme has a correlating value (typically the name of its primary color).
+    /// Passing this theme value to the JS runtime will set the app to the appropriate
+    /// theme.
     /// </summary>
     public class ThemeValues
     {
@@ -25,13 +29,16 @@ public class GameConstants
     /// </summary>
     public class SvgPaths
     {
+        /// <summary>
+        /// File path to the svg representing an unclaimed tile.
+        /// </summary>
         public static string BlankTile = "Assets/svgs/board-tile.svg";
 
         /// <summary>
         /// Returns the path for the svg containing the claimingPlayer's
-        /// symbol.
+        /// symbol. This will be used to represent a tile that has been claimed.
         /// </summary>
-        /// <param name="claimingPlayer">Player who will be represented by the returned tile</param>
+        /// <param name="claimingPlayer">Player who this tile will represent</param>
         /// <returns>File path to appropriate svg</returns>
         public static string GetTilePathFor(Player claimingPlayer)
         {
@@ -44,7 +51,7 @@ public class GameConstants
         /// </summary>
         /// <param name="themeValue">Value of the theme being applied</param>
         /// <returns>A list of file paths to local svgs</returns>
-        public static List<string> GetDecorativeSvgPaths(string themeValue)
+        public static List<string>? GetDecorativeSvgPaths(string themeValue)
         {
             switch (themeValue)
             {
